@@ -31,6 +31,8 @@ func (g *YatasPlugin) Run(c *commons.Config) []commons.Tests {
 	return checksAll
 }
 
+
+
 // handshakeConfigs are used to just do a basic handshake between
 // a plugin and host. If the handshake fails, a user friendly error is shown.
 // This prevents users from executing bad plugins or executing a plugin
@@ -40,6 +42,46 @@ var handshakeConfig = plugin.HandshakeConfig{
 	MagicCookieKey:   "BASIC_PLUGIN",
 	MagicCookieValue: "hello",
 }
+
+
+func authenticateImplicitWithAdc(w io.Writer, projectId string) error {
+         projectId := "padok-lab"
+
+        ctx := context.Background()
+
+        // NOTE: Replace the client created below with the client required for your application.
+        // Note that the credentials are not specified when constructing the client.
+        // The client library finds your credentials using ADC.
+        client, err := storage.NewClient(ctx)
+        if err != nil {
+                return fmt.Errorf("NewClient: %v", err)
+        }
+        defer client.Close()
+
+        it := client.Buckets(ctx, projectId)
+        for {
+                bucketAttrs, err := it.Next()
+                if err == iterator.Done {
+                        break
+                }
+                if err != nil {
+                        return err
+                }
+                fmt.Fprintf(w, "Bucket: %v\n", bucketAttrs.Name)
+        }
+
+        fmt.Fprintf(w, "Listed all storage buckets.\n")
+
+        return nil
+}
+
+
+
+
+
+
+
+
 
 func main() {
 	gob.Register([]interface{}{})
@@ -71,7 +113,7 @@ func main() {
 func runPlugin(c *commons.Config, plugin string) ([]commons.Tests, error) {
 	var checksAll []commons.Tests
 
-	// Run the checks here
+	
 
 	return checksAll, nil
 }

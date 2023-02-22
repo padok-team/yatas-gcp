@@ -1,0 +1,15 @@
+plugins:
+  - name: "gcp"
+    enabled: true
+    type: checks
+    source: "github.com/padok-team/yatas-gcp"
+    version: "local"
+    description: "Check for GCP good practices"
+
+pluginsConfiguration:
+  - pluginName: gcp
+    accounts:
+      - profile: "anael"
+        sso: true
+        region: "eu-west-3"
+        name: "yatas"
