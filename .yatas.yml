@@ -7,9 +7,6 @@ plugins:
     description: "Check for GCP good practices"
 
 pluginsConfiguration:
-  - pluginName: gcp
+  - pluginName: "gcp"
     accounts:
-      - profile: "anael"
-        sso: true
-        region: "eu-west-3"
-        name: "yatas"
+      - project: "padok-university"
