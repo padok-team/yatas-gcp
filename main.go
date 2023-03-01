@@ -1,22 +1,19 @@
 package main
 
 import (
+	"context"
 	"encoding/gob"
+	"fmt"
 	"os"
+	"sync"
+
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
-	"github.com/stangirard/yatas/plugins/commons"
-	"context"
-	"fmt"
-	"sync"
-    "google.golang.org/api/storage/v1"
 	"github.com/padok-team/yatas-gcp/gcp/gcs"
+	"github.com/padok-team/yatas-gcp/internal"
+	"github.com/padok-team/yatas/plugins/commons"
+	"google.golang.org/api/storage/v1"
 )
-
-
-type GCP_Account struct {
-	Project  string `yaml:"project"`    // Name of the account in the reports
-}
 
 type YatasPlugin struct {
 	logger hclog.Logger
@@ -27,42 +24,30 @@ type YatasPlugin struct {
 func (g *YatasPlugin) Run(c *commons.Config) []commons.Tests {
 	g.logger.Debug("message from Yatas Template Plugin")
 	var err error
-	var accounts []GCP_Account
+	var accounts []internal.GCP_Account
 	accounts, err = UnmarshalGCP(g, c)
-	g.logger.Debug("check",accounts)
+	g.logger.Debug("check", accounts)
 	if err != nil {
 		panic(err)
 	}
 
 	var checksAll []commons.Tests
 
-	checks, err := runPlugins(c, "gcp",accounts)
+	checks, err := runPlugins(c, "gcp", accounts)
 	if err != nil {
 		g.logger.Error("Error running plugins", "error", err)
 	}
 	checksAll = append(checksAll, checks...)
 
-    // if err != nil {
-    //     g.logger.Debug("Failed to connect to GCP: %v", err)
-    // }
-	// buckets, err := client.Buckets.List(accounts[0].Project).Do()
-    // if err != nil {
-    //     g.logger.Debug("Failed to list GCP buckets: %v", err)
-    // }
-    // for _, bucket := range buckets.Items {
-    //     g.logger.Debug("Bucket: %v\n", bucket.Name)
-    // }	
 	return checksAll
 }
 
-
 // Run the plugins that are enabled in the config with a switch based on the name of the plugin
-func runPlugins(c *commons.Config, plugin string,accounts []GCP_Account) ([]commons.Tests, error) {
+func runPlugins(c *commons.Config, plugin string, accounts []internal.GCP_Account) ([]commons.Tests, error) {
 
 	var checksAll []commons.Tests
 
-	
-	checksAll, err := Run(c,accounts)
+	checksAll, err := Run(c, accounts)
 	if err != nil {
 		return nil, err
 	}
@@ -70,16 +55,19 @@ func runPlugins(c *commons.Config, plugin string,accounts []GCP_Account) ([]comm
 	return checksAll, nil
 }
 
-func Run(c *commons.Config,accounts []GCP_Account ) ([]commons.Tests, error) {
+func Run(c *commons.Config, accounts []internal.GCP_Account) ([]commons.Tests, error) {
 
 	var wg sync.WaitGroup
 	var queue = make(chan commons.Tests, 10)
 	var checks []commons.Tests
-	client,_ := connectToGCP(accounts)
-	fmt.Println("value client",client)	
+	client, _ := connectToGCP(accounts)
+	fmt.Println("value client", client)
+	// creation object qui contient account et et
+
 	wg.Add(len(accounts))
 	for _, account := range accounts {
-		go runTestsForAccount(client,account, c, queue)
+		client_account := internal.Client_Account{Client: client, Gcp_account: account}
+		go runTestsForAccount(client_account, c, queue)
 	}
 	go func() {
 		for t := range queue {
@@ -93,21 +81,19 @@ func Run(c *commons.Config,accounts []GCP_Account ) ([]commons.Tests, error) {
 	return checks, nil
 }
 
-func runTestsForAccount(client *storage.Service ,account GCP_Account, c *commons.Config, queue chan commons.Tests) {
-	
-	checks := initTest(client, c, account)
+func runTestsForAccount(client internal.Client_Account, c *commons.Config, queue chan commons.Tests) {
+
+	checks := initTest(client, c)
 	queue <- checks
 }
 
-
-func initTest(s *storage.Service, c *commons.Config, a GCP_Account) commons.Tests {
+func initTest(client internal.Client_Account, c *commons.Config) commons.Tests {
 
 	var checks commons.Tests
-	checks.Account = a.Project
+	checks.Account = client.Gcp_account.Project
 	var wg sync.WaitGroup
 	queue := make(chan []commons.Check, 100)
-	go commons.CheckMacroTest(&wg, c, gcs.RunChecks)(&wg, s, c, queue)
-
+	go commons.CheckMacroTest(&wg, c, gcs.RunChecks)(&wg, client, c, queue)
 
 	go func() {
 		for t := range queue {
@@ -133,19 +119,15 @@ var handshakeConfig = plugin.HandshakeConfig{
 	MagicCookieValue: "hello",
 }
 
-func connectToGCP([]GCP_Account) (*storage.Service, error) {
-    ctx := context.Background()
-    // clientOptions := []option.ClientOption{}
-    service, err := storage.NewService(ctx)
-    if err != nil {
-        return nil, fmt.Errorf("failed to create GCP storage client: %v", err)
-    }
-    return service, nil
+func connectToGCP([]internal.GCP_Account) (*storage.Service, error) {
+	ctx := context.Background()
+	// clientOptions := []option.ClientOption{}
+	service, err := storage.NewService(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create GCP storage client: %v", err)
+	}
+	return service, nil
 }
-
-
-
-
 
 func main() {
 	gob.Register([]interface{}{})
@@ -171,11 +153,11 @@ func main() {
 	})
 }
 
-func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([] GCP_Account, error) {
-	var accounts [] GCP_Account
+func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCP_Account, error) {
+	var accounts []internal.GCP_Account
 
 	for _, r := range c.PluginConfig {
-		var tmpAccounts [] GCP_Account
+		var tmpAccounts []internal.GCP_Account
 		gcpFound := false
 		for key, value := range r {
 
@@ -188,7 +170,7 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([] GCP_Account, error) {
 			case "accounts":
 
 				for _, v := range value.([]interface{}) {
-					var account GCP_Account
+					var account internal.GCP_Account
 					g.logger.Debug("🔎")
 					g.logger.Debug("%v", v)
 					for keyaccounts, valueaccounts := range v.(map[string]interface{}) {
@@ -212,6 +194,6 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([] GCP_Account, error) {
 	g.logger.Debug("✅")
 	g.logger.Debug("%v", accounts)
 	g.logger.Debug("Length of accounts: %d", len(accounts))
-	g.logger.Debug("test",accounts[0].Project)
+	g.logger.Debug("test", accounts[0].Project)
 	return accounts, nil
 }
