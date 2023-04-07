@@ -1,20 +1,27 @@
 package gcs
 
 import (
+	"context"
 	"fmt"
 
+	"cloud.google.com/go/storage"
 	"github.com/padok-team/yatas-gcp/internal"
-	"google.golang.org/api/storage/v1"
+	"google.golang.org/api/iterator"
 )
 
-func GetListGCS(client internal.Client_Account) *storage.Buckets {
+func GetBuckets(account internal.GCPAccount, client *storage.Client) []storage.BucketAttrs {
+	var buckets []storage.BucketAttrs
 
-	buckets, err := client.Client.Buckets.List(client.Gcp_account.Project).Do()
-	if err != nil {
-		fmt.Println("Failed to list GCP buckets: %v", err)
-	}
-	for _, bucket := range buckets.Items {
-		fmt.Println("Bucket: %v\n", bucket.Name)
+	it := client.Buckets(context.TODO(), account.Project)
+	for {
+		bucketAttrs, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			fmt.Printf("Failed to list buckets: %v", err)
+		}
+		buckets = append(buckets, *bucketAttrs)
 	}
 
 	return buckets

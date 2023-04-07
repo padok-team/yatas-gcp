@@ -7,7 +7,7 @@ build:
 	go build -o bin/yatas-gcp
 
 update:
-	go get -u 
+	go get -u
 	go mod tidy
 
 install: build
@@ -16,4 +16,4 @@ install: build
 
 release: test
 	standard-version
-	git push --follow-tags origin main 
+	git push --follow-tags origin main

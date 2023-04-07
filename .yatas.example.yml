@@ -9,4 +9,5 @@ plugins:
 pluginsConfiguration:
   - pluginName: "gcp"
     accounts:
-      - project: "padok-university"
+      - project: "project-1"
+      - project: "project-2"
