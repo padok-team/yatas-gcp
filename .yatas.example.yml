@@ -1,0 +1,12 @@
+plugins:
+  - name: "gcp"
+    enabled: true
+    source: "github.com/padok-team/yatas-gcp"
+    version: "latest"
+    description: "Check for GCP good practices"
+
+pluginsConfiguration:
+  - pluginName: "gcp"
+    accounts:
+      - project: "project-1"
+      - project: "project-2"

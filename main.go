@@ -3,11 +3,13 @@ package main
 import (
 	"encoding/gob"
 	"os"
+	"sync"
 
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
-
-	"github.com/stangirard/yatas/plugins/commons"
+	"github.com/padok-team/yatas-gcp/gcp/gcs"
+	"github.com/padok-team/yatas-gcp/internal"
+	"github.com/padok-team/yatas/plugins/commons"
 )
 
 type YatasPlugin struct {
@@ -15,20 +17,88 @@ type YatasPlugin struct {
 }
 
 // Don't remove this function
+// funcrion of Yatas plugin
 func (g *YatasPlugin) Run(c *commons.Config) []commons.Tests {
-	g.logger.Debug("message from Yatas Template Plugin")
+	g.logger.Debug("Message from Yatas GCP plugin")
 	var err error
+	var accounts []internal.GCPAccount
+	accounts, err = UnmarshalGCP(g, c)
+	g.logger.Debug("check", accounts)
 	if err != nil {
 		panic(err)
 	}
+
 	var checksAll []commons.Tests
 
-	checks, err := runPlugin(c, "template")
+	checks, err := runPlugins(c, "gcp", accounts)
 	if err != nil {
 		g.logger.Error("Error running plugins", "error", err)
 	}
 	checksAll = append(checksAll, checks...)
+
 	return checksAll
+}
+
+// Run the plugins that are enabled in the config with a switch based on the name of the plugin
+func runPlugins(c *commons.Config, plugin string, accounts []internal.GCPAccount) ([]commons.Tests, error) {
+
+	var checksAll []commons.Tests
+
+	checksAll, err := Run(c, accounts)
+	if err != nil {
+		return nil, err
+	}
+
+	return checksAll, nil
+}
+
+func Run(c *commons.Config, accounts []internal.GCPAccount) ([]commons.Tests, error) {
+
+	var wg sync.WaitGroup
+	var queue = make(chan commons.Tests, 10)
+	var checks []commons.Tests
+
+	wg.Add(len(accounts))
+	for _, account := range accounts {
+		go runTestsForAccount(account, c, queue)
+	}
+	go func() {
+		for t := range queue {
+			checks = append(checks, t)
+
+			wg.Done()
+		}
+	}()
+	wg.Wait()
+
+	return checks, nil
+}
+
+func runTestsForAccount(account internal.GCPAccount, c *commons.Config, queue chan commons.Tests) {
+	checks := initTest(account, c)
+	queue <- checks
+}
+
+func initTest(account internal.GCPAccount, c *commons.Config) commons.Tests {
+	var checks commons.Tests
+	checks.Account = account.Project
+	var wg sync.WaitGroup
+	queue := make(chan []commons.Check, 100)
+
+	go commons.CheckMacroTest(&wg, c, gcs.RunChecks)(&wg, account, c, queue)
+
+	go func() {
+		for t := range queue {
+
+			checks.Checks = append(checks.Checks, t...)
+
+			wg.Done()
+
+		}
+	}()
+	wg.Wait()
+
+	return checks
 }
 
 // handshakeConfigs are used to just do a basic handshake between
@@ -56,10 +126,8 @@ func main() {
 	// pluginMap is the map of plugins we can dispense.
 	// Name of your plugin
 	var pluginMap = map[string]plugin.Plugin{
-		"template": &commons.YatasPlugin{Impl: yatasPlugin},
+		"gcp": &commons.YatasPlugin{Impl: yatasPlugin},
 	}
-
-	logger.Debug("message from plugin", "foo", "bar")
 
 	plugin.Serve(&plugin.ServeConfig{
 		HandshakeConfig: handshakeConfig,
@@ -67,11 +135,46 @@ func main() {
 	})
 }
 
-// Function that runs the checks or things to dot
-func runPlugin(c *commons.Config, plugin string) ([]commons.Tests, error) {
-	var checksAll []commons.Tests
+func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, error) {
+	var accounts []internal.GCPAccount
 
-	// Run the checks here
+	for _, r := range c.PluginConfig {
+		var tmpAccounts []internal.GCPAccount
+		gcpFound := false
+		for key, value := range r {
 
-	return checksAll, nil
+			switch key {
+			case "pluginName":
+				if value == "gcp" {
+					gcpFound = true
+
+				}
+			case "accounts":
+
+				for _, v := range value.([]interface{}) {
+					var account internal.GCPAccount
+					g.logger.Debug("🔎")
+					g.logger.Debug("%v", v)
+					for keyaccounts, valueaccounts := range v.(map[string]interface{}) {
+						switch keyaccounts {
+						case "project":
+							account.Project = valueaccounts.(string)
+						}
+					}
+					tmpAccounts = append(tmpAccounts, account)
+
+				}
+
+			}
+		}
+		if gcpFound {
+			g.logger.Debug("✅✅")
+			accounts = tmpAccounts
+		}
+
+	}
+	g.logger.Debug("✅")
+	g.logger.Debug("%v", accounts)
+	g.logger.Debug("Length of accounts: %d", len(accounts))
+	return accounts, nil
 }
