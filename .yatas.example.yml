@@ -1,9 +1,8 @@
 plugins:
   - name: "gcp"
     enabled: true
-    type: checks
     source: "github.com/padok-team/yatas-gcp"
-    version: "local"
+    version: "latest"
     description: "Check for GCP good practices"
 
 pluginsConfiguration:
