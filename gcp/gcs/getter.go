@@ -2,10 +2,10 @@ package gcs
 
 import (
 	"context"
-	"fmt"
 
 	"cloud.google.com/go/storage"
 	"github.com/padok-team/yatas-gcp/internal"
+	"github.com/padok-team/yatas-gcp/logger"
 	"google.golang.org/api/iterator"
 )
 
@@ -19,7 +19,7 @@ func GetBuckets(account internal.GCPAccount, client *storage.Client) []storage.B
 			break
 		}
 		if err != nil {
-			fmt.Printf("Failed to list buckets: %v", err)
+			logger.Logger.Error("Failed to list buckets", "error", err.Error())
 		}
 		buckets = append(buckets, *bucketAttrs)
 	}

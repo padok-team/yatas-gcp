@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/go-plugin"
 	"github.com/padok-team/yatas-gcp/gcp/gcs"
 	"github.com/padok-team/yatas-gcp/internal"
+	"github.com/padok-team/yatas-gcp/logger"
 	"github.com/padok-team/yatas/plugins/commons"
 )
 
@@ -19,20 +20,21 @@ type YatasPlugin struct {
 // Don't remove this function
 // funcrion of Yatas plugin
 func (g *YatasPlugin) Run(c *commons.Config) []commons.Tests {
-	g.logger.Debug("Message from Yatas GCP plugin")
+	logger.Logger = g.logger
+	logger.Logger.Debug("Message from Yatas GCP plugin")
 	var err error
 	var accounts []internal.GCPAccount
 	accounts, err = UnmarshalGCP(g, c)
-	g.logger.Debug("check", accounts)
 	if err != nil {
-		panic(err)
+		logger.Logger.Error("Error unmarshaling GCP accounts", "error", err)
+		return nil
 	}
 
 	var checksAll []commons.Tests
 
 	checks, err := runPlugins(c, "gcp", accounts)
 	if err != nil {
-		g.logger.Error("Error running plugins", "error", err)
+		logger.Logger.Error("Error running plugins", "error", err)
 	}
 	checksAll = append(checksAll, checks...)
 
@@ -153,8 +155,8 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 
 				for _, v := range value.([]interface{}) {
 					var account internal.GCPAccount
-					g.logger.Debug("🔎")
-					g.logger.Debug("%v", v)
+					logger.Logger.Debug("🔎")
+					logger.Logger.Debug("%v", v)
 					for keyaccounts, valueaccounts := range v.(map[string]interface{}) {
 						switch keyaccounts {
 						case "project":
@@ -168,13 +170,13 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 			}
 		}
 		if gcpFound {
-			g.logger.Debug("✅✅")
+			logger.Logger.Debug("✅✅")
 			accounts = tmpAccounts
 		}
 
 	}
-	g.logger.Debug("✅")
-	g.logger.Debug("%v", accounts)
-	g.logger.Debug("Length of accounts: %d", len(accounts))
+	logger.Logger.Debug("✅")
+	logger.Logger.Debug("%v", accounts)
+	logger.Logger.Debug("Length of accounts: %d", len(accounts))
 	return accounts, nil
 }
