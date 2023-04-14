@@ -88,8 +88,8 @@ github.com/mitchellh/go-testing-interface v1.14.1 h1:jrgshOhYAUVNMAJiKbEu7EqAwgJ
 github.com/mitchellh/go-testing-interface v1.14.1/go.mod h1:gfgS7OtZj6MA4U1UrDRp04twqAjfvlZyCfX3sDjEym8=
 github.com/oklog/run v1.1.0 h1:GEenZ1cK0+q0+wsJew9qUg/DyD8k3JzYsZAi5gYi2mA=
 github.com/oklog/run v1.1.0/go.mod h1:sVPdnTZT1zYwAJeCMu2Th4T21pA3FPOQRfWjQlk7DVU=
-github.com/padok-team/yatas v1.4.2 h1:DSdtAoJmqegggTvwHfTx5zn3p2Dk0Kp8ewmMzksHvxA=
-github.com/padok-team/yatas v1.4.2/go.mod h1:kVcXxb7dQW4+WMoUSdAtyHWdk48f/IWOEoVLraYS5Tg=
+github.com/padok-team/yatas v1.5.1 h1:PGM9UySPyzRUOK7tnrmGwibaUUgb1p+z97uuki7fbS8=
+github.com/padok-team/yatas v1.5.1/go.mod h1:G2jSf8Gxx1D/ntVRAd9P51AakVMi2ysZ4AOd6EivAqQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
