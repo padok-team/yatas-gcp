@@ -20,13 +20,14 @@
     },
     {
       "matchPackagePatterns": [
-        "github.com/aws/aws-sdk-go-v2/service/*"
+        "google.golang.org/api",
+        "cloud.google.com/go/*"
       ],
       "matchUpdateTypes": [
         "minor"
       ],
-      "groupName": "all minor aws dependencies",
-      "groupSlug": "all-minor-aws"
+      "groupName": "all minor Google Cloud dependencies",
+      "groupSlug": "all-minor-gcp"
     }
   ],
   "semanticCommits": "enabled"
