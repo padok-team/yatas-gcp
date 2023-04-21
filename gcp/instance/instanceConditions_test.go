@@ -10,6 +10,12 @@ func stringPtr(s string) *string {
 	return &s
 }
 
+type fakeResource struct{}
+
+func (f fakeResource) GetID() string {
+	return "fake-resource"
+}
+
 func TestInstanceNoPublicIPAttached(t *testing.T) {
 	testCases := []struct {
 		desc     string
@@ -123,5 +129,29 @@ func TestInstanceNoPublicIPAttached(t *testing.T) {
 				t.Errorf("InstanceNoPublicIPAttached(%v) = %v, want %v", instance, got, tc.want)
 			}
 		})
+	}
+}
+
+func TestDiskIsEncrypted(t *testing.T) {
+	// Create encrypted and unencrypted disks
+	key := computepb.CustomerEncryptionKey{}
+	diskWithKey := computepb.Disk{DiskEncryptionKey: &key}
+	disk := computepb.Disk{}
+
+	encryptedDisk := VMDisk{Disk: diskWithKey}
+	unencryptedDisk := VMDisk{Disk: disk}
+
+	// Ensure that the function correctly detects encrypted and unencrypted disks
+	if !DiskIsCustomerEncrypted(&encryptedDisk) {
+		t.Error("Expected encrypted disk to be detected as encrypted")
+	}
+	if DiskIsCustomerEncrypted(&unencryptedDisk) {
+		t.Error("Expected unencrypted disk to be detected as unencrypted")
+	}
+
+	// Ensure that the function returns false for non-disk resources
+	nonDiskResource := &fakeResource{}
+	if DiskIsCustomerEncrypted(nonDiskResource) {
+		t.Error("Expected non-disk resource to be detected as non-encrypted")
 	}
 }

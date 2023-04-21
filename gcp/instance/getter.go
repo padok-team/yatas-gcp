@@ -24,7 +24,7 @@ func GetComputeZones(account internal.GCPAccount) []string {
 		Project: account.Project,
 	}
 	var zones []string
-	it := client.List(context.TODO(), req)
+	it := client.List(ctx, req)
 	for {
 		resp, err := it.Next()
 		if err == iterator.Done {
@@ -49,13 +49,20 @@ func GetComputeZones(account internal.GCPAccount) []string {
 }
 
 // Get all the VM instances of the account for the given compute zone
-func GetInstances(account internal.GCPAccount, client *compute.InstancesClient, computeZone string) []computepb.Instance {
+func GetInstances(account internal.GCPAccount, computeZone string) []computepb.Instance {
+	ctx := context.Background()
+	client, err := compute.NewInstancesRESTClient(ctx)
+	if err != nil {
+		logger.Logger.Error("Failed to create Instance client", "error", err)
+	}
+	defer client.Close()
+
 	req := &computepb.ListInstancesRequest{
 		Project: account.Project,
 		Zone:    computeZone,
 	}
 	var instances []computepb.Instance
-	it := client.List(context.TODO(), req)
+	it := client.List(ctx, req)
 	for {
 		resp, err := it.Next()
 		if err == iterator.Done {
@@ -69,4 +76,33 @@ func GetInstances(account internal.GCPAccount, client *compute.InstancesClient, 
 	}
 
 	return instances
+}
+
+func GetDisks(account internal.GCPAccount, computeZone string) []computepb.Disk {
+	ctx := context.Background()
+	client, err := compute.NewDisksRESTClient(ctx)
+	if err != nil {
+		logger.Logger.Error("Failed to create Disk client", "error", err)
+	}
+	defer client.Close()
+
+	req := &computepb.ListDisksRequest{
+		Project: account.Project,
+		Zone:    computeZone,
+	}
+	var disks []computepb.Disk
+	it := client.List(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			logger.Logger.Error("Failed to list Disks", "error", err.Error())
+			break
+		}
+		disks = append(disks, *resp)
+	}
+
+	return disks
 }

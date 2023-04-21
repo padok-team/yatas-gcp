@@ -1,52 +1,36 @@
 package instance
 
 import (
-	"context"
-	"fmt"
-	"strings"
 	"sync"
 
-	compute "cloud.google.com/go/compute/apiv1"
 	"cloud.google.com/go/compute/apiv1/computepb"
 	"github.com/padok-team/yatas-gcp/internal"
-	"github.com/padok-team/yatas-gcp/logger"
 	"github.com/padok-team/yatas/plugins/commons"
 )
-
-type VMInstance struct {
-	Instance computepb.Instance
-}
-
-func (i *VMInstance) GetID() string {
-	zoneURLSplit := strings.Split(i.Instance.GetZone(), "/")
-	zoneName := zoneURLSplit[len(zoneURLSplit)-1]
-	return fmt.Sprintf("%s/%s (%d)", zoneName, i.Instance.GetName(), i.Instance.GetId())
-}
 
 func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Config, queue chan []commons.Check) {
 	var checkConfig commons.CheckConfig
 	checkConfig.Init(c)
 	var checks []commons.Check
 
-	ctx := context.Background()
-	client, err := compute.NewInstancesRESTClient(ctx)
-	if err != nil {
-		logger.Logger.Error("Failed to create Instance client", "error", err)
-	}
-	defer client.Close()
-
 	computeZones := GetComputeZones(account)
 
 	// Get all the instances in all the compute zones specified
 	var instances []computepb.Instance
 	for _, zone := range computeZones {
-		instances = append(instances, GetInstances(account, client, zone)...)
+		instances = append(instances, GetInstances(account, zone)...)
+	}
+
+	// Get all the disks in all the compute zones specified
+	var disks []computepb.Disk
+	for _, zone := range computeZones {
+		disks = append(disks, GetDisks(account, zone)...)
 	}
 
 	instanceChecks := []commons.CheckDefinition{
 		{
 			Title:          "GCP_VM_001",
-			Description:    "Check if VM instance is not using a public IP address.",
+			Description:    "Check if VM instance is not using a public IP address",
 			Categories:     []string{"Security", "Good Practice"},
 			ConditionFn:    InstanceNoPublicIPAttached,
 			SuccessMessage: "VM instance is not using a public IP address",
@@ -54,13 +38,30 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 		},
 	}
 
+	diskChecks := []commons.CheckDefinition{
+		{
+			Title:          "GCP_VM_002",
+			Description:    "Check if VM Disk is encrypted with a customer-managed key",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    DiskIsCustomerEncrypted,
+			SuccessMessage: "VM Disk is encrypted with a customer-managed key",
+			FailureMessage: "VM Disk is not encrypted with a customer-managed key",
+		},
+	}
+
 	var resources []commons.Resource
 	for _, instance := range instances {
 		resources = append(resources, &VMInstance{Instance: instance})
 	}
+	var diskResources []commons.Resource
+	for _, disk := range disks {
+		diskResources = append(diskResources, &VMDisk{Disk: disk})
+	}
 
 	commons.AddChecks(&checkConfig, instanceChecks)
+	commons.AddChecks(&checkConfig, diskChecks)
 	go commons.CheckResources(checkConfig, resources, instanceChecks)
+	go commons.CheckResources(checkConfig, diskResources, diskChecks)
 
 	go func() {
 		for t := range checkConfig.Queue {

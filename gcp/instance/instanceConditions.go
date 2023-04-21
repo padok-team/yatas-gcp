@@ -27,3 +27,11 @@ func InstanceNoPublicIPAttached(resource commons.Resource) bool {
 	}
 	return true
 }
+
+func DiskIsCustomerEncrypted(resource commons.Resource) bool {
+	disk, ok := resource.(*VMDisk)
+	if !ok {
+		return false
+	}
+	return disk.Disk.DiskEncryptionKey != nil
+}
