@@ -11,3 +11,15 @@ func GCSBucketVersioningEnabled(resource commons.Resource) bool {
 	}
 	return bucket.Bucket.VersioningEnabled
 }
+
+func GCSBucketEncryptionEnabled(resource commons.Resource) bool {
+	bucket, ok := resource.(*GCSBucket)
+	if !ok {
+		return false
+	}
+	if bucket.Bucket.Encryption != nil {
+		return true
+	} else {
+		return false
+	}
+}

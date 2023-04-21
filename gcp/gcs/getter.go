@@ -23,6 +23,5 @@ func GetBuckets(account internal.GCPAccount, client *storage.Client) []storage.B
 		}
 		buckets = append(buckets, *bucketAttrs)
 	}
-
 	return buckets
 }

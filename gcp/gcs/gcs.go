@@ -42,6 +42,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "GCS bucket is using object versioning",
 			FailureMessage: "GCS bucket is not using object versioning",
 		},
+		{
+			Title:          "GCP_GCS_002",
+			Description:    "Check if GCS buckets is encrypted with a custom KMS key",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    GCSBucketEncryptionEnabled,
+			SuccessMessage: "GCS bucket is encrypted with a custom KMS key",
+			FailureMessage: "GCS bucket is not encrypted",
+		},
 	}
 
 	var resources []commons.Resource
