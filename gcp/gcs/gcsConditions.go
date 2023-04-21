@@ -23,3 +23,12 @@ func GCSBucketEncryptionEnabled(resource commons.Resource) bool {
 		return false
 	}
 }
+
+// TODO: avoid to do one API call per bucket
+func GCSBucketPublicAccess(resource commons.Resource) bool {
+	bucket, ok := resource.(*GCSBucket)
+	if !ok {
+		return false
+	}
+
+}

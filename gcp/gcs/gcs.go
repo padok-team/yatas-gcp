@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	"cloud.google.com/go/iam"
 	"cloud.google.com/go/storage"
 
 	"github.com/padok-team/yatas-gcp/internal"
@@ -13,6 +14,7 @@ import (
 
 type GCSBucket struct {
 	Bucket storage.BucketAttrs
+	Policy iam.Policy
 }
 
 func (b *GCSBucket) GetID() string {
@@ -44,11 +46,19 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 		},
 		{
 			Title:          "GCP_GCS_002",
-			Description:    "Check if GCS buckets is encrypted with a custom KMS key",
+			Description:    "Check if GCS buckets are encrypted with a custom KMS key",
 			Categories:     []string{"Security", "Good Practice"},
 			ConditionFn:    GCSBucketEncryptionEnabled,
 			SuccessMessage: "GCS bucket is encrypted with a custom KMS key",
 			FailureMessage: "GCS bucket is not encrypted",
+		},
+		{
+			Title:          "GCP_GCS_002",
+			Description:    "Check if GCS buckets are public",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    GCSBucketPublicAccess,
+			SuccessMessage: "GCS bucket is not public",
+			FailureMessage: "GCS bucket is public",
 		},
 	}
 
