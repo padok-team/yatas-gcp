@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/padok-team/yatas-gcp/gcp/gcs"
+	"github.com/padok-team/yatas-gcp/gcp/instance"
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas-gcp/logger"
 	"github.com/padok-team/yatas/plugins/commons"
@@ -87,6 +88,7 @@ func initTest(account internal.GCPAccount, c *commons.Config) commons.Tests {
 	queue := make(chan []commons.Check, 100)
 
 	go commons.CheckMacroTest(&wg, c, gcs.RunChecks)(&wg, account, c, queue)
+	go commons.CheckMacroTest(&wg, c, instance.RunChecks)(&wg, account, c, queue)
 
 	go func() {
 		for t := range queue {
@@ -159,6 +161,12 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 						switch keyaccounts {
 						case "project":
 							account.Project = valueaccounts.(string)
+						case "computeRegions":
+							// Cannot directly unmarshal []interface{} to []string
+							computeRegions := valueaccounts.([]interface{})
+							for _, computeRegion := range computeRegions {
+								account.ComputeRegions = append(account.ComputeRegions, computeRegion.(string))
+							}
 						}
 					}
 					tmpAccounts = append(tmpAccounts, account)
