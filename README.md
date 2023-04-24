@@ -31,9 +31,15 @@ pluginsConfiguration:
 
 <!-- BEGIN_YATAS -->
 
-## GCP - 1 Checks
+## GCP - 5 Checks
 
 ### GCS
-- GCP_GCS_001 GCS buckets are versioned
+- GCP_GCS_001 Check if GCS buckets are using object versioning
+- GCP_GCS_002 Check if GCS buckets are encrypted with a custom KMS key
+- GCP_GCS_003 Check if GCS buckets are not public
+
+### VM
+- GCP_VM_001 Check if VM instance is not using a public IP address
+- GCP_VM_002 Check if VM Disk is encrypted with a customer-managed key
 
 <!-- END_YATAS -->
