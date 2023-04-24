@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	"cloud.google.com/go/iam"
 	"cloud.google.com/go/storage"
 
 	"github.com/padok-team/yatas-gcp/internal"
@@ -13,6 +14,7 @@ import (
 
 type GCSBucket struct {
 	Bucket storage.BucketAttrs
+	Policy iam.Policy
 }
 
 func (b *GCSBucket) GetID() string {
@@ -42,11 +44,28 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "GCS bucket is using object versioning",
 			FailureMessage: "GCS bucket is not using object versioning",
 		},
+		{
+			Title:          "GCP_GCS_002",
+			Description:    "Check if GCS buckets are encrypted with a custom KMS key",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    GCSBucketEncryptionEnabled,
+			SuccessMessage: "GCS bucket is encrypted with a custom KMS key",
+			FailureMessage: "GCS bucket is not encrypted",
+		},
+		{
+			Title:          "GCP_GCS_003",
+			Description:    "Check if GCS buckets are not public",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    GCSBucketNoPublicAccess,
+			SuccessMessage: "GCS bucket are not public",
+			FailureMessage: "GCS bucket are public",
+		},
 	}
 
 	var resources []commons.Resource
 	for _, bucket := range buckets {
-		resources = append(resources, &GCSBucket{Bucket: bucket})
+		policy := GetBucketPolicy(account, client, bucket.Name)
+		resources = append(resources, &GCSBucket{Bucket: bucket, Policy: policy})
 	}
 	commons.AddChecks(&checkConfig, gcsChecks)
 	go commons.CheckResources(checkConfig, resources, gcsChecks)

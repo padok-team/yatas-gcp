@@ -3,6 +3,7 @@ package gcs
 import (
 	"context"
 
+	"cloud.google.com/go/iam"
 	"cloud.google.com/go/storage"
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas-gcp/logger"
@@ -23,6 +24,11 @@ func GetBuckets(account internal.GCPAccount, client *storage.Client) []storage.B
 		}
 		buckets = append(buckets, *bucketAttrs)
 	}
-
 	return buckets
+}
+
+func GetBucketPolicy(account internal.GCPAccount, client *storage.Client, bucket string) iam.Policy {
+	c := client.Bucket(bucket)
+	policy, _ := c.IAM().Policy(context.TODO())
+	return *policy
 }
