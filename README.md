@@ -26,7 +26,13 @@ pluginsConfiguration:
   - pluginName: "gcp"
     accounts:
       - project: "project-1"
+        computeRegions:
+          - europe-west1
+          - europe-west2
+          - europe-west3
       - project: "project-2"
+        computeRegions:
+          - us-east1
 ```
 
 <!-- BEGIN_YATAS -->
