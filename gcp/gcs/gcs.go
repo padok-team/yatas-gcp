@@ -53,18 +53,19 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			FailureMessage: "GCS bucket is not encrypted",
 		},
 		{
-			Title:          "GCP_GCS_002",
-			Description:    "Check if GCS buckets are public",
+			Title:          "GCP_GCS_003",
+			Description:    "Check if GCS buckets are not public",
 			Categories:     []string{"Security", "Good Practice"},
-			ConditionFn:    GCSBucketPublicAccess,
-			SuccessMessage: "GCS bucket is not public",
-			FailureMessage: "GCS bucket is public",
+			ConditionFn:    GCSBucketNoPublicAccess,
+			SuccessMessage: "GCS bucket are not public",
+			FailureMessage: "GCS bucket are public",
 		},
 	}
 
 	var resources []commons.Resource
 	for _, bucket := range buckets {
-		resources = append(resources, &GCSBucket{Bucket: bucket})
+		policy := GetBucketPolicy(account, client, bucket.Name)
+		resources = append(resources, &GCSBucket{Bucket: bucket, Policy: policy})
 	}
 	commons.AddChecks(&checkConfig, gcsChecks)
 	go commons.CheckResources(checkConfig, resources, gcsChecks)

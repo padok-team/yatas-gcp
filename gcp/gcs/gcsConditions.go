@@ -25,10 +25,16 @@ func GCSBucketEncryptionEnabled(resource commons.Resource) bool {
 }
 
 // TODO: avoid to do one API call per bucket
-func GCSBucketPublicAccess(resource commons.Resource) bool {
+func GCSBucketNoPublicAccess(resource commons.Resource) bool {
 	bucket, ok := resource.(*GCSBucket)
 	if !ok {
 		return false
 	}
-
+	members := bucket.Policy.Members("roles/storage.objectViewer")
+	for _, member := range members {
+		if member == "allUsers" {
+			return false
+		}
+	}
+	return true
 }

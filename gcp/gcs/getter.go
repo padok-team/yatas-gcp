@@ -27,11 +27,8 @@ func GetBuckets(account internal.GCPAccount, client *storage.Client) []storage.B
 	return buckets
 }
 
-func GetBucketPolicy(account internal.GCPAccount, client *storage.Client, GCSBuckets []GCSBucket) *iam.Policy {
-	for _, bucket := range GCSBuckets {
-		bucket := client.Bucket(bucket.Bucket.Name)
-		policy, _ := bucket.IAM().Policy(context.TODO())
-		return policy
-	}
-	return &iam.Policy{}
+func GetBucketPolicy(account internal.GCPAccount, client *storage.Client, bucket string) iam.Policy {
+	c := client.Bucket(bucket)
+	policy, _ := c.IAM().Policy(context.TODO())
+	return *policy
 }
