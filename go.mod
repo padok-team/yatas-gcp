@@ -3,8 +3,8 @@ module github.com/padok-team/yatas-gcp
 go 1.20
 
 require (
-	cloud.google.com/go/compute v1.19.1
-	cloud.google.com/go/iam v1.0.0
+	cloud.google.com/go/compute v1.19.2
+	cloud.google.com/go/iam v1.0.1
 	cloud.google.com/go/storage v1.30.1
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.4.9
