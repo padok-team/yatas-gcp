@@ -3,13 +3,13 @@ module github.com/padok-team/yatas-gcp
 go 1.20
 
 require (
-	cloud.google.com/go/compute v1.19.2
+	cloud.google.com/go/compute v1.19.3
 	cloud.google.com/go/iam v1.0.1
 	cloud.google.com/go/storage v1.30.1
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.4.9
 	github.com/padok-team/yatas v1.5.1
-	google.golang.org/api v0.121.0
+	google.golang.org/api v0.122.0
 )
 
 require (
@@ -33,8 +33,8 @@ require (
 	github.com/oklog/run v1.1.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
-	golang.org/x/net v0.9.0 // indirect
-	golang.org/x/oauth2 v0.7.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/oauth2 v0.8.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
