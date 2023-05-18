@@ -9,7 +9,7 @@ require (
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.4.9
 	github.com/padok-team/yatas v1.5.1
-	google.golang.org/api v0.122.0
+	google.golang.org/api v0.123.0
 )
 
 require (
