@@ -29,6 +29,10 @@ func GetBuckets(account internal.GCPAccount, client *storage.Client) []storage.B
 
 func GetBucketPolicy(account internal.GCPAccount, client *storage.Client, bucket string) iam.Policy {
 	c := client.Bucket(bucket)
-	policy, _ := c.IAM().Policy(context.TODO())
+	policy, err := c.IAM().Policy(context.TODO())
+	if err != nil {
+		logger.Logger.Error("Failed to get bucket policy", "error", err.Error())
+		return iam.Policy{}
+	}
 	return *policy
 }
