@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/padok-team/yatas-gcp/compare/v1.2.0...v1.2.1) (2023-05-19)
+
+
+### Bug Fixes
+
+* **checks/gcs:** handle error when getting bucket policy ([bec174c](https://github.com/padok-team/yatas-gcp/commit/bec174ca168e8f5e5686b66b0334b413a8a275be))
+
 ## [1.2.0](https://github.com/padok-team/yatas-gcp/compare/v1.1.0...v1.2.0) (2023-04-24)
 
 
