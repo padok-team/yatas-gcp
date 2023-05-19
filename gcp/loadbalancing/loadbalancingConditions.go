@@ -5,7 +5,7 @@ import (
 )
 
 func SSLCertificatesAreManaged(resource commons.Resource) bool {
-	forwardingRule, ok := resource.(*GCSForwardingRulesWithSSL)
+	forwardingRule, ok := resource.(*ForwardingRulesWithSSL)
 	if !ok {
 		return false
 	}

@@ -9,12 +9,12 @@ import (
 	"github.com/padok-team/yatas/plugins/commons"
 )
 
-type GCSForwardingRulesWithSSL struct {
+type ForwardingRulesWithSSL struct {
 	ForwardingRule computepb.ForwardingRule
 	Certificates   []computepb.SslCertificate
 }
 
-func (f *GCSForwardingRulesWithSSL) GetID() string {
+func (f *ForwardingRulesWithSSL) GetID() string {
 	certNames := []string{}
 	for _, cert := range f.Certificates {
 		certNames = append(certNames, *cert.Name)
@@ -39,11 +39,11 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 	forwardingRules = append(forwardingRules, GetForwardingRulesHTTPS(account, "global")...)
 
 	// For each forwarding rule, get the SSL certificates attached to it
-	forwardingRulesWithSSL := []GCSForwardingRulesWithSSL{}
+	forwardingRulesWithSSL := []ForwardingRulesWithSSL{}
 	for _, forwardingRule := range forwardingRules {
 		// Get the SSL certificates attached to the forwarding rule
 		certificates := GetForwardingRuleSSLCertificate(account, forwardingRule)
-		forwardingRulesWithSSL = append(forwardingRulesWithSSL, GCSForwardingRulesWithSSL{
+		forwardingRulesWithSSL = append(forwardingRulesWithSSL, ForwardingRulesWithSSL{
 			ForwardingRule: forwardingRule,
 			Certificates:   certificates,
 		})
