@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/padok-team/yatas-gcp/compare/v1.2.1...v1.3.0) (2023-05-26)
+
+
+### Features
+
+* **checks/lb:** check if Forwarding Rules have SSL certificated auto-renewed ([29b0f05](https://github.com/padok-team/yatas-gcp/commit/29b0f05b61dfe4aa1af04ee269736746cef0d3c8))
+* **checks/lb:** WIP: getter for forwarding rules ([1d5d9bb](https://github.com/padok-team/yatas-gcp/commit/1d5d9bba8f97c1b99e357003c533f5c0507a78b6))
+* **checks/sql:** add two first checks for SQL ([7a2d96d](https://github.com/padok-team/yatas-gcp/commit/7a2d96d4477f9cd09e135093a9591515f13b55b2))
+* **checks/sql:** GCP_SQL_003: check RequireSsl on instances ([decaf52](https://github.com/padok-team/yatas-gcp/commit/decaf529d0f03af2fda44d620a260dd5501dd500))
+* **checks/sql:** GCP_SQL_004: check no public IP on instances ([55bfeea](https://github.com/padok-team/yatas-gcp/commit/55bfeea9ca11cb3a0906d000f750a395c6133916))
+* **checks/sql:** GCP_SQL_005: check instance encrypted with KMS key ([e1db4da](https://github.com/padok-team/yatas-gcp/commit/e1db4da22a347e0057b835c811a908c55c77c272))
+* **README.md:** update documentation ([17ad2e1](https://github.com/padok-team/yatas-gcp/commit/17ad2e18bc5cafc6f6052956bf133bf822afb7cf))
+
+
+### Bug Fixes
+
+* **checks/lb:** add TODO comment for SSLProxies ([db894a5](https://github.com/padok-team/yatas-gcp/commit/db894a545b7ee24dbab5a210e67adf6e55305519))
+* **checks/lb:** rename forwarding rules type ([feb3311](https://github.com/padok-team/yatas-gcp/commit/feb331124a20afe1b2d7fcf6242e7944299c7e8d))
+
 ### [1.2.1](https://github.com/padok-team/yatas-gcp/compare/v1.2.0...v1.2.1) (2023-05-19)
 
 
