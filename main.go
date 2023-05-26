@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/go-plugin"
 	"github.com/padok-team/yatas-gcp/gcp/gcs"
 	"github.com/padok-team/yatas-gcp/gcp/instance"
+	"github.com/padok-team/yatas-gcp/gcp/sql"
 	"github.com/padok-team/yatas-gcp/gcp/loadbalancing"
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas-gcp/logger"
@@ -90,6 +91,7 @@ func initTest(account internal.GCPAccount, c *commons.Config) commons.Tests {
 
 	go commons.CheckMacroTest(&wg, c, gcs.RunChecks)(&wg, account, c, queue)
 	go commons.CheckMacroTest(&wg, c, instance.RunChecks)(&wg, account, c, queue)
+	go commons.CheckMacroTest(&wg, c, sql.RunChecks)(&wg, account, c, queue)
 	go commons.CheckMacroTest(&wg, c, loadbalancing.RunChecks)(&wg, account, c, queue)
 
 	go func() {
