@@ -57,6 +57,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "SQL instance is not exposed with a public IP",
 			FailureMessage: "SQL instance is exposed with a public IP",
 		},
+		{
+			Title:          "GCP_SQL_005",
+			Description:    "Check if SQL Instances are encrypted at rest with a customer-managed key",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    SQLInstanceIsEncryptedWithKMS,
+			SuccessMessage: "SQL instance is encrypted at rest with a customer-managed key",
+			FailureMessage: "SQL instance is not encrypted at rest with a customer-managed key",
+		},
 	}
 
 	var resources []commons.Resource

@@ -61,3 +61,12 @@ func SQLInstanceNotPublicIP(resource commons.Resource) bool {
 
 	return true
 }
+
+func SQLInstanceIsEncryptedWithKMS(resource commons.Resource) bool {
+	sqlInstance, ok := resource.(*SQLInstance)
+	if !ok {
+		return false
+	}
+
+	return sqlInstance.Instance.DiskEncryptionConfiguration != nil && sqlInstance.Instance.DiskEncryptionConfiguration.KmsKeyName != ""
+}

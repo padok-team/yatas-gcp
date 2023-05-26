@@ -116,7 +116,6 @@ func TestSQLInstanceNotPublicIP(t *testing.T) {
 			IpAddresses: []*sqladmin.IpMapping{},
 		},
 	}
-
 	if !SQLInstanceNotPublicIP(instance) {
 		t.Error("Expected SQLInstanceNotPublicIP to return true when there is no IP address")
 	}
@@ -134,5 +133,34 @@ func TestSQLInstanceNotPublicIP(t *testing.T) {
 	instance.Instance.IpAddresses[0].IpAddress = "192.168.128.1"
 	if !SQLInstanceNotPublicIP(instance) {
 		t.Error("Expected SQLInstanceNotPublicIP to return true when there is only private IP addresses")
+	}
+}
+
+func TestSQLInstanceIsEncryptedWithKMS(t *testing.T) {
+	// Test when resource is not an SQLInstance
+	if SQLInstanceIsEncryptedWithKMS(&fakeResource{}) {
+		t.Error("Expected SQLInstanceIsEncryptedWithKMS to return false for non-SQLInstance resource")
+	}
+
+	// Test when there is no DiskEncryptionConfiguration
+	instance := &SQLInstance{
+		Instance: sqladmin.DatabaseInstance{},
+	}
+	if SQLInstanceIsEncryptedWithKMS(instance) {
+		t.Error("Expected SQLInstanceIsEncryptedWithKMS to return false when there is no DiskEncryptionConfiguration")
+	}
+
+	// Test when there is a DiskEncryptionConfiguration
+	instance.Instance.DiskEncryptionConfiguration = &sqladmin.DiskEncryptionConfiguration{}
+	if SQLInstanceIsEncryptedWithKMS(instance) {
+		t.Error("Expected SQLInstanceIsEncryptedWithKMS to return false when there is not a KMS key")
+	}
+
+	// Test when there is a KMS key
+	instance.Instance.DiskEncryptionConfiguration = &sqladmin.DiskEncryptionConfiguration{
+		KmsKeyName: "projects/123/locations/global/keyRings/123/cryptoKeys/123",
+	}
+	if !SQLInstanceIsEncryptedWithKMS(instance) {
+		t.Error("Expected SQLInstanceIsEncryptedWithKMS to return true when there is a KMS key")
 	}
 }
