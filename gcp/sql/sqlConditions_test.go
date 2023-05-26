@@ -70,3 +70,36 @@ func TestSQLInstanceBackupWithPITREnabled(t *testing.T) {
 		t.Error("Expected SQLInstanceBackupWithPITREnabled to return true when backup and PITR are enabled")
 	}
 }
+
+func TestSQLInstanceEncryptedTrafficEnforced(t *testing.T) {
+	// Test when resource is not an SQLInstance
+	if SQLInstanceEncryptedTrafficEnforced(&fakeResource{}) {
+		t.Error("Expected SQLInstanceEncryptedTrafficEnforced to return false for non-SQLInstance resource")
+	}
+
+	// Test when SSL Require is not referenced by the API
+	instance := &SQLInstance{
+		Instance: sqladmin.DatabaseInstance{
+			Settings: &sqladmin.Settings{
+				IpConfiguration: &sqladmin.IpConfiguration{
+					Ipv4Enabled: true,
+				},
+			},
+		},
+	}
+	if SQLInstanceEncryptedTrafficEnforced(instance) {
+		t.Error("Expected SQLInstanceEncryptedTrafficEnforced to return false when RequireSsl is not referenced by the API")
+	}
+
+	// Test when Require SSL is set to false
+	instance.Instance.Settings.IpConfiguration.RequireSsl = false
+	if SQLInstanceEncryptedTrafficEnforced(instance) {
+		t.Error("Expected SQLInstanceEncryptedTrafficEnforced to return false when RequireSsl is not enabled")
+	}
+
+	// Test when Require SSL is set to true
+	instance.Instance.Settings.IpConfiguration.RequireSsl = true
+	if !SQLInstanceEncryptedTrafficEnforced(instance) {
+		t.Error("Expected SQLInstanceEncryptedTrafficEnforced to return true when RequireSsl is enabled")
+	}
+}

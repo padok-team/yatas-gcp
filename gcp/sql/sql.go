@@ -41,6 +41,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "SQL instance has backups enabled with Point in Time Recovery",
 			FailureMessage: "SQL instances does not have backups enabled with Point in Time Recovery",
 		},
+		{
+			Title:          "GCP_SQL_003",
+			Description:    "Check if SQL Instances have encrypted traffic enforced",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    SQLInstanceEncryptedTrafficEnforced,
+			SuccessMessage: "SQL instance has encrypted traffic enforced (require SSL option)",
+			FailureMessage: "SQL instances does not have encrypted traffic enforced (require SSL option)",
+		},
 	}
 
 	var resources []commons.Resource

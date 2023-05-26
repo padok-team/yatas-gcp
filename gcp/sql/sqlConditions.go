@@ -27,3 +27,12 @@ func SQLInstanceBackupWithPITREnabled(resource commons.Resource) bool {
 		return false
 	}
 }
+
+func SQLInstanceEncryptedTrafficEnforced(resource commons.Resource) bool {
+	sqlInstance, ok := resource.(*SQLInstance)
+	if !ok {
+		return false
+	}
+
+	return sqlInstance.Instance.Settings != nil && sqlInstance.Instance.Settings.IpConfiguration.RequireSsl
+}
