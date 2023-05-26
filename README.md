@@ -37,12 +37,22 @@ pluginsConfiguration:
 
 <!-- BEGIN_YATAS -->
 
-## GCP - 5 Checks
+## GCP - 11 Checks
 
 ### GCS
 - GCP_GCS_001 Check if GCS buckets are using object versioning
 - GCP_GCS_002 Check if GCS buckets are encrypted with a custom KMS key
 - GCP_GCS_003 Check if GCS buckets are not public
+
+### LB
+- GCP_LB_001 Check if SSL certificates attached to HTTPS forwarding rules are in auto-renewed (managed mode)
+
+### SQL
+- GCP_SQL_001 Check if SQL Instances are Regional (HA)
+- GCP_SQL_002 Check if SQL Instances have backups enabled with Point in Time Recovery
+- GCP_SQL_003 Check if SQL Instances have encrypted traffic enforced
+- GCP_SQL_004 Check if SQL Instances are not exposed with a public IP
+- GCP_SQL_005 Check if SQL Instances are encrypted at rest with a customer-managed key
 
 ### VM
 - GCP_VM_001 Check if VM instance is not using a public IP address
