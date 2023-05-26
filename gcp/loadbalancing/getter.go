@@ -42,6 +42,7 @@ func GetForwardingRulesHTTPS(account internal.GCPAccount, region string) []compu
 			break
 		}
 		// Keep only the forwarding rules with a target of type TargetHTTPSProxy
+		// TODO: Also support the SSLProxy targets
 		if resp.Target != nil && strings.Contains(*resp.Target, "targetHttpsProxies") {
 			rules = append(rules, *resp)
 		}
