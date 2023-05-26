@@ -49,6 +49,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "SQL instance has encrypted traffic enforced (require SSL option)",
 			FailureMessage: "SQL instances does not have encrypted traffic enforced (require SSL option)",
 		},
+		{
+			Title:          "GCP_SQL_004",
+			Description:    "Check if SQL Instances are not exposed with a public IP",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    SQLInstanceNotPublicIP,
+			SuccessMessage: "SQL instance is not exposed with a public IP",
+			FailureMessage: "SQL instance is exposed with a public IP",
+		},
 	}
 
 	var resources []commons.Resource

@@ -1,6 +1,8 @@
 package sql
 
 import (
+	"net"
+
 	"github.com/padok-team/yatas/plugins/commons"
 )
 
@@ -35,4 +37,27 @@ func SQLInstanceEncryptedTrafficEnforced(resource commons.Resource) bool {
 	}
 
 	return sqlInstance.Instance.Settings != nil && sqlInstance.Instance.Settings.IpConfiguration.RequireSsl
+}
+
+func isPublicIP(ip string) bool {
+	parsedIP := net.ParseIP(ip)
+	if parsedIP == nil {
+		return false
+	}
+	return !parsedIP.IsPrivate()
+}
+
+func SQLInstanceNotPublicIP(resource commons.Resource) bool {
+	sqlInstance, ok := resource.(*SQLInstance)
+	if !ok {
+		return false
+	}
+
+	for _, ip := range sqlInstance.Instance.IpAddresses {
+		if isPublicIP(ip.IpAddress) {
+			return false
+		}
+	}
+
+	return true
 }

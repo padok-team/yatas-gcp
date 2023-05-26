@@ -103,3 +103,36 @@ func TestSQLInstanceEncryptedTrafficEnforced(t *testing.T) {
 		t.Error("Expected SQLInstanceEncryptedTrafficEnforced to return true when RequireSsl is enabled")
 	}
 }
+
+func TestSQLInstanceNotPublicIP(t *testing.T) {
+	// Test when resource is not an SQLInstance
+	if SQLInstanceNotPublicIP(&fakeResource{}) {
+		t.Error("Expected SQLInstanceNotPublicIP to return false for non-SQLInstance resource")
+	}
+
+	// Test when there is no IP address
+	instance := &SQLInstance{
+		Instance: sqladmin.DatabaseInstance{
+			IpAddresses: []*sqladmin.IpMapping{},
+		},
+	}
+
+	if !SQLInstanceNotPublicIP(instance) {
+		t.Error("Expected SQLInstanceNotPublicIP to return true when there is no IP address")
+	}
+
+	// Test when there is a public IP address
+	instance.Instance.IpAddresses = append(instance.Instance.IpAddresses, &sqladmin.IpMapping{
+		IpAddress: "1.2.3.4",
+		Type:      "PRIMARY",
+	})
+	if SQLInstanceNotPublicIP(instance) {
+		t.Error("Expected SQLInstanceNotPublicIP to return false when there is a public IP address")
+	}
+
+	// Test when no IP address is public
+	instance.Instance.IpAddresses[0].IpAddress = "192.168.128.1"
+	if !SQLInstanceNotPublicIP(instance) {
+		t.Error("Expected SQLInstanceNotPublicIP to return true when there is only private IP addresses")
+	}
+}
