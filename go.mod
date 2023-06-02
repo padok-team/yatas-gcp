@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/iam v1.0.1
 	cloud.google.com/go/storage v1.30.1
 	github.com/hashicorp/go-hclog v1.5.0
-	github.com/hashicorp/go-plugin v1.4.9
+	github.com/hashicorp/go-plugin v1.4.10
 	github.com/padok-team/yatas v1.5.1
 	google.golang.org/api v0.123.0
 )
