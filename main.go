@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/padok-team/yatas-gcp/gcp/gcs"
+	"github.com/padok-team/yatas-gcp/gcp/gke"
 	"github.com/padok-team/yatas-gcp/gcp/instance"
 	"github.com/padok-team/yatas-gcp/gcp/loadbalancing"
 	"github.com/padok-team/yatas-gcp/gcp/sql"
@@ -93,6 +94,7 @@ func initTest(account internal.GCPAccount, c *commons.Config) commons.Tests {
 	go commons.CheckMacroTest(&wg, c, instance.RunChecks)(&wg, account, c, queue)
 	go commons.CheckMacroTest(&wg, c, sql.RunChecks)(&wg, account, c, queue)
 	go commons.CheckMacroTest(&wg, c, loadbalancing.RunChecks)(&wg, account, c, queue)
+	go commons.CheckMacroTest(&wg, c, gke.RunChecks)(&wg, account, c, queue)
 
 	go func() {
 		for t := range queue {
