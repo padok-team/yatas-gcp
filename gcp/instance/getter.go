@@ -106,3 +106,64 @@ func GetDisks(account internal.GCPAccount, computeZone string) []computepb.Disk 
 
 	return disks
 }
+
+// Get all the instance groups (of type managed) of the account (zonal and regional)
+func GetInstanceGroupsAllZones(account internal.GCPAccount) []computepb.InstanceGroupManager {
+	regions := account.ComputeRegions
+	zones := GetComputeZones(account)
+	ctx := context.Background()
+
+	regionClient, err := compute.NewRegionInstanceGroupManagersRESTClient(ctx)
+	if err != nil {
+		logger.Logger.Error("Failed to create Regional Instance Group client", "error", err)
+	}
+	defer regionClient.Close()
+
+	zoneClient, err := compute.NewInstanceGroupManagersRESTClient(ctx)
+	if err != nil {
+		logger.Logger.Error("Failed to create Zonal Instance Group client", "error", err)
+	}
+	defer zoneClient.Close()
+
+	var instanceGroups []computepb.InstanceGroupManager
+
+	for _, region := range regions {
+		req := &computepb.ListRegionInstanceGroupManagersRequest{
+			Project: account.Project,
+			Region:  region,
+		}
+		it := regionClient.List(ctx, req)
+		for {
+			resp, err := it.Next()
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				logger.Logger.Error("Failed to list Regional Instance Groups", "error", err.Error())
+				break
+			}
+			instanceGroups = append(instanceGroups, *resp)
+		}
+	}
+
+	for _, zone := range zones {
+		req := &computepb.ListInstanceGroupManagersRequest{
+			Project: account.Project,
+			Zone:    zone,
+		}
+		it := zoneClient.List(ctx, req)
+		for {
+			resp, err := it.Next()
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				logger.Logger.Error("Failed to list Zonal Instance Groups", "error", err.Error())
+				break
+			}
+			instanceGroups = append(instanceGroups, *resp)
+		}
+	}
+
+	return instanceGroups
+}
