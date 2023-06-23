@@ -41,6 +41,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "Workload Identity is enabled",
 			FailureMessage: "Workload Identity is not enabled",
 		},
+		{
+			Title:          "GCP_GKE_003",
+			Description:    "GKE Control Plane does not have a public endpoint",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    GKEIsNotExposedOnPublicEndpoint,
+			SuccessMessage: "Control Plane is not exposed on a public endpoint",
+			FailureMessage: "Control Plane is exposed on a public endpoint",
+		},
 	}
 
 	var resources []commons.Resource

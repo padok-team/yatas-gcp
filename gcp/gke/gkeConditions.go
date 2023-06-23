@@ -1,6 +1,7 @@
 package gke
 
 import (
+	"net"
 	"regexp"
 
 	"github.com/padok-team/yatas/plugins/commons"
@@ -29,4 +30,21 @@ func GKEIsUsingWorkloadIdentity(resource commons.Resource) bool {
 	}
 
 	return cluster.Cluster.WorkloadIdentityConfig != nil && cluster.Cluster.WorkloadIdentityConfig.WorkloadPool != ""
+}
+
+func isPublicIP(ip string) bool {
+	parsedIP := net.ParseIP(ip)
+	if parsedIP == nil {
+		return false
+	}
+	return !parsedIP.IsPrivate()
+}
+
+func GKEIsNotExposedOnPublicEndpoint(resource commons.Resource) bool {
+	cluster, ok := resource.(*GKECluster)
+	if !ok {
+		return false
+	}
+
+	return cluster.Cluster.PrivateClusterConfig != nil && cluster.Cluster.PrivateClusterConfig.EnablePrivateEndpoint && !isPublicIP(cluster.Cluster.Endpoint)
 }
