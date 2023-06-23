@@ -65,6 +65,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "SQL instance is encrypted at rest with a customer-managed key",
 			FailureMessage: "SQL instance is not encrypted at rest with a customer-managed key",
 		},
+		{
+			Title:          "GCP_SQL_006",
+			Description:    "Check if SQL backups are stored in a multi-regional location",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    SQLBackupsAreMultiRegional,
+			SuccessMessage: "SQL backups are stored in a multi-regional location",
+			FailureMessage: "SQL backups are stored in a regional location",
+		},
 	}
 
 	var resources []commons.Resource

@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"github.com/padok-team/yatas/plugins/commons"
+	"golang.org/x/exp/slices"
 )
 
 func SQLInstanceIsRegional(resource commons.Resource) bool {
@@ -69,4 +70,21 @@ func SQLInstanceIsEncryptedWithKMS(resource commons.Resource) bool {
 	}
 
 	return sqlInstance.Instance.DiskEncryptionConfiguration != nil && sqlInstance.Instance.DiskEncryptionConfiguration.KmsKeyName != ""
+}
+
+func SQLBackupsAreMultiRegional(resource commons.Resource) bool {
+	sqlInstance, ok := resource.(*SQLInstance)
+	if !ok {
+		return false
+	}
+
+	if sqlInstance.Instance.Settings == nil ||
+		sqlInstance.Instance.Settings.BackupConfiguration == nil ||
+		!sqlInstance.Instance.Settings.BackupConfiguration.Enabled {
+		return false
+	}
+
+	acceptedLocations := []string{"eu", "us", "asia"}
+
+	return slices.Contains(acceptedLocations, sqlInstance.Instance.Settings.BackupConfiguration.Location)
 }

@@ -164,3 +164,41 @@ func TestSQLInstanceIsEncryptedWithKMS(t *testing.T) {
 		t.Error("Expected SQLInstanceIsEncryptedWithKMS to return true when there is a KMS key")
 	}
 }
+
+func TestSQLBackupsAreMultiRegional(t *testing.T) {
+	// Test when resource is not an SQLInstance
+	if SQLBackupsAreMultiRegional(&fakeResource{}) {
+		t.Error("Expected SQLBackupsAreMultiRegional to return false for non-SQLInstance resource")
+	}
+
+	// Test when there is no BackupConfiguration
+	instance := &SQLInstance{
+		Instance: sqladmin.DatabaseInstance{},
+	}
+	if SQLBackupsAreMultiRegional(instance) {
+		t.Error("Expected SQLBackupsAreMultiRegional to return false when there is no BackupConfiguration")
+	}
+
+	// Test when there is a BackupConfiguration but disabled
+	instance.Instance.Settings = &sqladmin.Settings{
+		BackupConfiguration: &sqladmin.BackupConfiguration{
+			Enabled: false,
+		},
+	}
+	if SQLBackupsAreMultiRegional(instance) {
+		t.Error("Expected SQLBackupsAreMultiRegional to return false when BackupConfiguration is disabled")
+	}
+
+	// Test with multi-regional backup
+	instance.Instance.Settings.BackupConfiguration.Enabled = true
+	instance.Instance.Settings.BackupConfiguration.Location = "eu"
+	if !SQLBackupsAreMultiRegional(instance) {
+		t.Error("Expected SQLBackupsAreMultiRegional to return true when there is a multi-regional backup")
+	}
+
+	// Test with regional backup
+	instance.Instance.Settings.BackupConfiguration.Location = "europe-west3"
+	if SQLBackupsAreMultiRegional(instance) {
+		t.Error("Expected SQLBackupsAreMultiRegional to return false when there is a regional backup")
+	}
+}
