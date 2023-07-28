@@ -28,3 +28,18 @@ func (d *VMDisk) GetID() string {
 	zoneName := zoneURLSplit[len(zoneURLSplit)-1]
 	return fmt.Sprintf("%s/%s (%d)", zoneName, d.Disk.GetName(), d.Disk.GetId())
 }
+
+// This type implements commons.Resource
+type InstanceGroup struct {
+	InstanceGroup computepb.InstanceGroupManager
+}
+
+func (i *InstanceGroup) GetID() string {
+	zoneURLSplit := strings.Split(i.InstanceGroup.GetZone(), "/")
+	zoneName := zoneURLSplit[len(zoneURLSplit)-1]
+	if zoneName == "" {
+		regionURLSplit := strings.Split(i.InstanceGroup.GetRegion(), "/")
+		zoneName = regionURLSplit[len(regionURLSplit)-1]
+	}
+	return fmt.Sprintf("%s/%s (%d)", zoneName, i.InstanceGroup.GetName(), i.InstanceGroup.GetId())
+}
