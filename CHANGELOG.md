@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/padok-team/yatas-gcp/compare/v1.3.0...v1.4.0) (2023-07-28)
+
+
+### Features
+
+* **checks/sql:** GCP_SQL_006: backups are multi-regional ([#20](https://github.com/padok-team/yatas-gcp/issues/20)) ([6e362a1](https://github.com/padok-team/yatas-gcp/commit/6e362a16be4c1d827ff7f6b05986d39b7537efb6))
+* **gke:** Add GKE checks ([#21](https://github.com/padok-team/yatas-gcp/issues/21)) ([13703eb](https://github.com/padok-team/yatas-gcp/commit/13703eb03a83bef4f1660b820c435cdaf07a707f))
+
 ## [1.3.0](https://github.com/padok-team/yatas-gcp/compare/v1.2.1...v1.3.0) (2023-05-26)
 
 
