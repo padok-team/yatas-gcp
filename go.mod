@@ -5,7 +5,7 @@ go 1.20
 require (
 	cloud.google.com/go/compute v1.23.0
 	cloud.google.com/go/container v1.24.0
-	cloud.google.com/go/iam v1.1.1
+	cloud.google.com/go/iam v1.1.2
 	cloud.google.com/go/storage v1.31.0
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.4.10
