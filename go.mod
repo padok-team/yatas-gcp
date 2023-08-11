@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/compute v1.23.0
 	cloud.google.com/go/container v1.26.0
 	cloud.google.com/go/iam v1.1.2
+	cloud.google.com/go/run v1.2.0
 	cloud.google.com/go/storage v1.33.0
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.4.10
@@ -17,6 +18,7 @@ require (
 require (
 	cloud.google.com/go v0.110.6 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	cloud.google.com/go/longrunning v0.5.1 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
