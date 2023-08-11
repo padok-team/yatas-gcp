@@ -35,3 +35,12 @@ func DiskIsCustomerEncrypted(resource commons.Resource) bool {
 	}
 	return disk.Disk.DiskEncryptionKey != nil
 }
+
+func InstanceGroupIsMultiZone(resource commons.Resource) bool {
+	instanceGroup, ok := resource.(*InstanceGroup)
+	if !ok {
+		return false
+	}
+	// A InstanceGroupManager without DistributionPolicy is a zonal InstanceGroupManager
+	return instanceGroup.InstanceGroup.GetDistributionPolicy() != nil
+}

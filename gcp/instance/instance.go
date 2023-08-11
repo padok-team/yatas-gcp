@@ -27,6 +27,8 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 		disks = append(disks, GetDisks(account, zone)...)
 	}
 
+	instanceGroups := GetInstanceGroupsAllZones(account)
+
 	instanceChecks := []commons.CheckDefinition{
 		{
 			Title:          "GCP_VM_001",
@@ -49,6 +51,17 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 		},
 	}
 
+	instanceGroupChecks := []commons.CheckDefinition{
+		{
+			Title:          "GCP_VM_003",
+			Description:    "Check VM instance group is multi-zonal",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    InstanceGroupIsMultiZone,
+			SuccessMessage: "VM instance group is multi-zonal",
+			FailureMessage: "VM instance group is not multi-zonal",
+		},
+	}
+
 	var resources []commons.Resource
 	for _, instance := range instances {
 		resources = append(resources, &VMInstance{Instance: instance})
@@ -57,11 +70,17 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 	for _, disk := range disks {
 		diskResources = append(diskResources, &VMDisk{Disk: disk})
 	}
+	var instanceGroupResources []commons.Resource
+	for _, instanceGroup := range instanceGroups {
+		instanceGroupResources = append(instanceGroupResources, &InstanceGroup{InstanceGroup: instanceGroup})
+	}
 
 	commons.AddChecks(&checkConfig, instanceChecks)
 	commons.AddChecks(&checkConfig, diskChecks)
+	commons.AddChecks(&checkConfig, instanceGroupChecks)
 	go commons.CheckResources(checkConfig, resources, instanceChecks)
 	go commons.CheckResources(checkConfig, diskResources, diskChecks)
+	go commons.CheckResources(checkConfig, instanceGroupResources, instanceGroupChecks)
 
 	go func() {
 		for t := range checkConfig.Queue {
