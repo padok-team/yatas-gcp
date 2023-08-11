@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.4.10
 	github.com/padok-team/yatas v1.5.1
-	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
+	golang.org/x/exp v0.0.0-20230810033253-352e893a4cad
 	google.golang.org/api v0.136.0
 )
 
