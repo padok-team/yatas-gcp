@@ -37,7 +37,7 @@ pluginsConfiguration:
 
 <!-- BEGIN_YATAS -->
 
-## GCP - 15 Checks
+## GCP - 16 Checks
 
 ### GCS
 - GCP_GCS_001 Check if GCS buckets are using object versioning
@@ -63,5 +63,6 @@ pluginsConfiguration:
 ### VM
 - GCP_VM_001 Check if VM instance is not using a public IP address
 - GCP_VM_002 Check if VM Disk is encrypted with a customer-managed key
+- GCP_VM_003 Check VM instance group is multi-zonal
 
 <!-- END_YATAS -->
