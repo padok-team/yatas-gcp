@@ -32,6 +32,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "Service is exposed internally or through a load balancer",
 			FailureMessage: "Service is directly exposed on the internet",
 		},
+		{
+			Title:          "GCP_RUN_002",
+			Description:    "CloudRun services do not use the default Compute Engine service account",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    CloudRunServiceIsNotUsingDefaultSA,
+			SuccessMessage: "Service is not using the default Compute Engine service account",
+			FailureMessage: "Service is using the default Compute Engine service account",
+		},
 	}
 
 	var resources []commons.Resource
