@@ -40,6 +40,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "Service is not using the default Compute Engine service account",
 			FailureMessage: "Service is using the default Compute Engine service account",
 		},
+		{
+			Title:          "GCP_RUN_003",
+			Description:    "CloudRun services do not have plain text secrets in environment variables",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    CloudRunServiceDoesNotHaveSecretInEnv,
+			SuccessMessage: "Service SEEMS to not have plain text secrets in environment variables, check manually",
+			FailureMessage: "Service MIGHT have plain text secrets in environment variables, check manually",
+		},
 	}
 
 	var resources []commons.Resource
