@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/padok-team/yatas-gcp/compare/v1.4.0...v1.5.0) (2023-10-06)
+
+
+### Features
+
+* **checks:** add checks on CloudRun services ([#31](https://github.com/padok-team/yatas-gcp/issues/31)) ([02d379e](https://github.com/padok-team/yatas-gcp/commit/02d379e8ad7a0cacee170ffe40c00d19271a3537))
+* **go:** update to go 1.21 ([1f9f806](https://github.com/padok-team/yatas-gcp/commit/1f9f806d0f4decfef8d50b457ba816d5bab9c156))
+* **instance:** Add check for Instance Groups ([#22](https://github.com/padok-team/yatas-gcp/issues/22)) ([525d984](https://github.com/padok-team/yatas-gcp/commit/525d984a304327ffb31bbfaf4f46d31c83e79646))
+
 ## [1.4.0](https://github.com/padok-team/yatas-gcp/compare/v1.3.0...v1.4.0) (2023-07-28)
 
 
