@@ -1,6 +1,6 @@
 module github.com/padok-team/yatas-gcp
 
-go 1.20
+go 1.21
 
 require (
 	cloud.google.com/go/compute v1.23.0
