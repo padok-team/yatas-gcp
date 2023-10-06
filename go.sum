@@ -9,6 +9,10 @@ cloud.google.com/go/container v1.26.0 h1:SszQdI0qlyKsImz8/l26rpTZMyqvaH9yfua7rir
 cloud.google.com/go/container v1.26.0/go.mod h1:YJCmRet6+6jnYYRS000T6k0D0xUXQgBSaJ7VwI8FBj4=
 cloud.google.com/go/iam v1.1.2 h1:gacbrBdWcoVmGLozRuStX45YKvJtzIjJdAolzUs1sm4=
 cloud.google.com/go/iam v1.1.2/go.mod h1:A5avdyVL2tCppe4unb0951eI9jreack+RJ0/d+KUZOU=
+cloud.google.com/go/longrunning v0.5.1 h1:Fr7TXftcqTudoyRJa113hyaqlGdiBQkp0Gq7tErFDWI=
+cloud.google.com/go/longrunning v0.5.1/go.mod h1:spvimkwdz6SPWKEt/XBij79E9fiTkHSQl/fRUUQJYJc=
+cloud.google.com/go/run v1.2.0 h1:kHeIG8q+N6Zv0nDkBjSOYfK2eWqa5FnaiDPH/7/HirE=
+cloud.google.com/go/run v1.2.0/go.mod h1:36V1IlDzQ0XxbQjUx6IYbw8H3TJnWvhii963WW3B/bo=
 cloud.google.com/go/storage v1.33.0 h1:PVrDOkIC8qQVa1P3SXGpQvfuJhN2LHOoyZvWs8D2X5M=
 cloud.google.com/go/storage v1.33.0/go.mod h1:Hhh/dogNRGca7IWv1RC2YqEn0c0G77ctA/OxflYkiD8=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
