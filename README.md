@@ -37,7 +37,7 @@ pluginsConfiguration:
 
 <!-- BEGIN_YATAS -->
 
-## GCP - 16 Checks
+## GCP - 19 Checks
 
 ### GCS
 - GCP_GCS_001 Check if GCS buckets are using object versioning
@@ -51,6 +51,11 @@ pluginsConfiguration:
 
 ### LB
 - GCP_LB_001 Check if SSL certificates attached to HTTPS forwarding rules are in auto-renewed (managed mode)
+
+### RUN
+- GCP_RUN_001 CloudRun services are not directly exposed on the internet
+- GCP_RUN_002 CloudRun services do not use the default Compute Engine service account
+- GCP_RUN_003 CloudRun services do not have plain text secrets in environment variables
 
 ### SQL
 - GCP_SQL_001 Check if SQL Instances are Regional (HA)
