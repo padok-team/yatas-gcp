@@ -3,9 +3,9 @@ module github.com/padok-team/yatas-gcp
 go 1.21
 
 require (
-	cloud.google.com/go/compute v1.23.0
-	cloud.google.com/go/container v1.26.0
-	cloud.google.com/go/iam v1.1.2
+	cloud.google.com/go/compute v1.23.1
+	cloud.google.com/go/container v1.26.1
+	cloud.google.com/go/iam v1.1.3
 	cloud.google.com/go/run v1.2.0
 	cloud.google.com/go/storage v1.33.0
 	github.com/hashicorp/go-hclog v1.5.0
@@ -36,8 +36,8 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/oklog/run v1.1.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	golang.org/x/crypto v0.13.0 // indirect
-	golang.org/x/net v0.15.0 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.12.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
