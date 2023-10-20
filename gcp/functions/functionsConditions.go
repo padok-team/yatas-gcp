@@ -23,3 +23,17 @@ func CloudFunctionIsNotUsingDefaultSA(resource commons.Resource) bool {
 	sa := fun.Function.ServiceConfig.ServiceAccountEmail
 	return sa != "" && !internal.IsDefaultComputeEngineSA(sa)
 }
+
+func CloudFunctionsDoesNotHaveSecretInEnv(resource commons.Resource) bool {
+	fun, ok := resource.(*CloudFunction)
+	if !ok {
+		return false
+	}
+	vars := fun.Function.ServiceConfig.EnvironmentVariables
+	for name, value := range vars {
+		if value != "" && internal.MayBeSensitive(name, value) {
+			return false
+		}
+	}
+	return true
+}

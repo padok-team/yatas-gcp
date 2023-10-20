@@ -40,6 +40,14 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "Function is not using the default Compute Engine service account",
 			FailureMessage: "Function is using the default Compute Engine service account",
 		},
+		{
+			Title:          "GCP_FUN_003",
+			Description:    "CloudFunctions do not have plain text secrets in environment variables",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    CloudFunctionsDoesNotHaveSecretInEnv,
+			SuccessMessage: "Function SEEMS to not have plain text secrets in environment variables, check manually",
+			FailureMessage: "Function MIGHT have plain text secrets in environment variables, check manually",
+		},
 	}
 
 	var resources []commons.Resource
