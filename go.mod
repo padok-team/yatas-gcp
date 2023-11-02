@@ -4,10 +4,10 @@ go 1.21
 
 require (
 	cloud.google.com/go/compute v1.23.3
-	cloud.google.com/go/container v1.26.2
+	cloud.google.com/go/container v1.27.1
 	cloud.google.com/go/iam v1.1.5
 	cloud.google.com/go/run v1.3.3
-	cloud.google.com/go/storage v1.33.0
+	cloud.google.com/go/storage v1.34.1
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-plugin v1.5.2
 	github.com/padok-team/yatas v1.5.1
