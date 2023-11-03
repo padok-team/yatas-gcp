@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/padok-team/yatas-gcp/compare/v1.5.0...v1.6.0) (2023-11-03)
+
+
+### Features
+
+* **checks:** Add checks on CloudFunctions ([#42](https://github.com/padok-team/yatas-gcp/issues/42)) ([ae66ee4](https://github.com/padok-team/yatas-gcp/commit/ae66ee4c645a582c639352ae9768bc66f00766cd))
+
 ## [1.5.0](https://github.com/padok-team/yatas-gcp/compare/v1.4.0...v1.5.0) (2023-10-06)
 
 
