@@ -4,12 +4,15 @@ import (
 	"sync"
 
 	"cloud.google.com/go/functions/apiv2/functionspb"
+	"cloud.google.com/go/iam/apiv1/iampb"
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas/plugins/commons"
 )
 
 type CloudFunction struct {
 	Function *functionspb.Function
+	Project  string
+	Policy   *iampb.Policy
 }
 
 func (c *CloudFunction) GetID() string {
@@ -48,11 +51,20 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 			SuccessMessage: "Function SEEMS to not have plain text secrets in environment variables, check manually",
 			FailureMessage: "Function MIGHT have plain text secrets in environment variables, check manually",
 		},
+		{
+			Title:          "GCP_FUN_004",
+			Description:    "CloudFunctions require IAM authentication",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    CloudFunctionRequireIAMAuthentication,
+			SuccessMessage: "Function requires IAM authentication",
+			FailureMessage: "Function allows unauthenticated requests",
+		},
 	}
 
 	var resources []commons.Resource
 	for _, f := range functions {
-		resources = append(resources, &CloudFunction{Function: f})
+		policy := GetCloudFunctionPolicy(f)
+		resources = append(resources, &CloudFunction{Function: f, Project: account.Project, Policy: policy})
 	}
 	commons.AddChecks(&checkConfig, functionsChecks)
 	go commons.CheckResources(checkConfig, resources, functionsChecks)

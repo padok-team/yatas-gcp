@@ -1,14 +1,19 @@
 package internal
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 )
 
 // The default Compute Engine service account is always PROJECT_NUMBER-compute@developer.gserviceaccount.com
-func IsDefaultComputeEngineSA(name string) bool {
+func IsDefaultComputeEngineSA(sa string) bool {
 	regionPattern := regexp.MustCompile(`^[0-9]+-compute@developer\.gserviceaccount\.com$`)
-	return regionPattern.MatchString(name)
+	return regionPattern.MatchString(sa)
+}
+
+func IsDefaultAppEngineSA(sa string, project string) bool {
+	return sa == fmt.Sprintf("%s@appspot.gserviceaccount.com", project)
 }
 
 // Check if a variable name or value may be sensitive
