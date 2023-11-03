@@ -21,6 +21,7 @@ func GetBuckets(account internal.GCPAccount, client *storage.Client) []storage.B
 		}
 		if err != nil {
 			logger.Logger.Error("Failed to list buckets", "error", err.Error())
+			break
 		}
 		buckets = append(buckets, *bucketAttrs)
 	}

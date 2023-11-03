@@ -5,6 +5,7 @@ go 1.21
 require (
 	cloud.google.com/go/compute v1.23.3
 	cloud.google.com/go/container v1.27.1
+	cloud.google.com/go/functions v1.15.4
 	cloud.google.com/go/iam v1.1.5
 	cloud.google.com/go/run v1.3.3
 	cloud.google.com/go/storage v1.34.1

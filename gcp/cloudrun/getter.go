@@ -33,6 +33,7 @@ func GetCloudRunServices(account internal.GCPAccount) []runpb.Service {
 			}
 			if err != nil {
 				logger.Logger.Error("Failed to list CloudRun services", "error", err.Error())
+				break
 			}
 			services = append(services, *resp)
 		}
