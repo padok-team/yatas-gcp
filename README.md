@@ -37,7 +37,13 @@ pluginsConfiguration:
 
 <!-- BEGIN_YATAS -->
 
-## GCP - 19 Checks
+## GCP - 23 Checks
+
+### FUN
+- GCP_FUN_001 CloudFunctions are not directly exposed on the internet
+- GCP_FUN_002 CloudFunctions do not use the default Compute Engine service account
+- GCP_FUN_003 CloudFunctions do not have plain text secrets in environment variables
+- GCP_FUN_004 CloudFunctions require IAM authentication
 
 ### GCS
 - GCP_GCS_001 Check if GCS buckets are using object versioning
