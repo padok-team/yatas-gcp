@@ -9,7 +9,7 @@ require (
 	cloud.google.com/go/iam v1.1.5
 	cloud.google.com/go/run v1.3.3
 	cloud.google.com/go/storage v1.36.0
-	github.com/hashicorp/go-hclog v1.5.0
+	github.com/hashicorp/go-hclog v1.6.2
 	github.com/hashicorp/go-plugin v1.6.0
 	github.com/padok-team/yatas v1.5.1
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa
