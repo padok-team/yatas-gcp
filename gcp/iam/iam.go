@@ -3,6 +3,7 @@ package iam
 import (
 	"sync"
 
+	"cloud.google.com/go/iam/admin/apiv1/adminpb"
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas/plugins/commons"
 )
@@ -16,12 +17,22 @@ func (p *PermissionsBySA) GetID() string {
 	return p.SA
 }
 
+type SAKey struct {
+	Key *adminpb.ServiceAccountKey
+}
+
+func (k *SAKey) GetID() string {
+	return k.Key.Name
+}
+
 func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Config, queue chan []commons.Check) {
 	var checkConfig commons.CheckConfig
 	checkConfig.Init(c)
 	var checks []commons.Check
 
 	permissionsBySA := GetPermissionsByServiceAccounts(account)
+
+	SAKeys := GetServiceAccountKeys(account)
 
 	iamPermissionsChecks := []commons.CheckDefinition{
 		{
@@ -34,12 +45,32 @@ func RunChecks(wa *sync.WaitGroup, account internal.GCPAccount, c *commons.Confi
 		},
 	}
 
+	keysChecks := []commons.CheckDefinition{
+		{
+			Title:          "GCP_IAM_002",
+			Description:    "Service accounts keys are not older than 90 days",
+			Categories:     []string{"Security", "Good Practice"},
+			ConditionFn:    SAKeysNotOlderThan90Days,
+			SuccessMessage: "Service Account key is not older than 90 days.",
+			FailureMessage: "Service Account key is older than 90 days. Consider rotating it.",
+		},
+	}
+
+	// Service accounts
 	var permissionsResources []commons.Resource
 	for sa, permissions := range permissionsBySA {
 		permissionsResources = append(permissionsResources, &PermissionsBySA{SA: sa, Permissions: permissions})
 	}
 	commons.AddChecks(&checkConfig, iamPermissionsChecks)
 	go commons.CheckResources(checkConfig, permissionsResources, iamPermissionsChecks)
+
+	// Keys
+	var keysResources []commons.Resource
+	for _, key := range SAKeys {
+		keysResources = append(keysResources, &SAKey{Key: key})
+	}
+	commons.AddChecks(&checkConfig, keysChecks)
+	go commons.CheckResources(checkConfig, keysResources, keysChecks)
 
 	go func() {
 		for t := range checkConfig.Queue {

@@ -3,6 +3,7 @@ package iam
 import (
 	"regexp"
 	"slices"
+	"time"
 
 	"github.com/padok-team/yatas/plugins/commons"
 )
@@ -45,4 +46,15 @@ func SACannotEscalatePrivileges(resource commons.Resource) bool {
 	}
 
 	return true
+}
+
+func SAKeysNotOlderThan90Days(resource commons.Resource) bool {
+	saKey, ok := resource.(*SAKey)
+	if !ok {
+		return false
+	}
+
+	t := time.Unix(saKey.Key.ValidAfterTime.Seconds, 0)
+	daysDiff := time.Since(t).Hours() / 24
+	return daysDiff <= 90
 }

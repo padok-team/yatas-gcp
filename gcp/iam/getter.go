@@ -76,6 +76,9 @@ func GetPermissionsByServiceAccounts(account internal.GCPAccount) map[string][]s
 func getKeysOfServiceAccount(sa *adminpb.ServiceAccount, ctx context.Context, c *admin.IamClient) []*adminpb.ServiceAccountKey {
 	req := &adminpb.ListServiceAccountKeysRequest{
 		Name: sa.GetName(),
+		KeyTypes: []adminpb.ListServiceAccountKeysRequest_KeyType{
+			adminpb.ListServiceAccountKeysRequest_USER_MANAGED,
+		},
 	}
 	resp, err := c.ListServiceAccountKeys(ctx, req)
 	if err != nil {
