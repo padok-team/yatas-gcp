@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/padok-team/yatas-gcp/compare/v1.6.0...v1.7.0) (2024-01-19)
+
+
+### Features
+
+* **checks:** add checks for IAM ([#55](https://github.com/padok-team/yatas-gcp/issues/55)) ([87030b2](https://github.com/padok-team/yatas-gcp/commit/87030b2c3c699b8cc48e64bb4b23b249e770ccd9))
+
 ## [1.6.0](https://github.com/padok-team/yatas-gcp/compare/v1.5.0...v1.6.0) (2023-11-03)
 
 
