@@ -112,7 +112,7 @@ func GetServiceAccountKeys(account internal.GCPAccount) []*adminpb.ServiceAccoun
 		}
 		if err != nil {
 			logger.Logger.Error("Failed to list service accounts for project", "project", account.Project, "error", err)
-			return nil // TODO
+			return nil
 		}
 
 		saList = append(saList, resp)
