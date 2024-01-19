@@ -37,7 +37,7 @@ pluginsConfiguration:
 
 <!-- BEGIN_YATAS -->
 
-## GCP - 23 Checks
+## GCP - 25 Checks
 
 ### FUN
 - GCP_FUN_001 CloudFunctions are not directly exposed on the internet
@@ -54,6 +54,10 @@ pluginsConfiguration:
 - GCP_GKE_001 GKE Control Plane is Regional (HA)
 - GCP_GKE_002 Workload Identity is enabled
 - GCP_GKE_003 GKE Control Plane does not have a public endpoint
+
+### IAM
+- GCP_IAM_001 Service accounts cannot escalate privileges
+- GCP_IAM_002 Service accounts keys are not older than 90 days
 
 ### LB
 - GCP_LB_001 Check if SSL certificates attached to HTTPS forwarding rules are in auto-renewed (managed mode)
