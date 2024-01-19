@@ -7,12 +7,12 @@ require (
 	cloud.google.com/go/container v1.29.0
 	cloud.google.com/go/functions v1.15.4
 	cloud.google.com/go/iam v1.1.5
+	cloud.google.com/go/resourcemanager v1.9.4
 	cloud.google.com/go/run v1.3.3
 	cloud.google.com/go/storage v1.36.0
 	github.com/hashicorp/go-hclog v1.6.2
 	github.com/hashicorp/go-plugin v1.6.0
 	github.com/padok-team/yatas v1.5.1
-	golang.org/x/exp v0.0.0-20231214170342-aacd6d4b4611
 	google.golang.org/api v0.157.0
 )
 

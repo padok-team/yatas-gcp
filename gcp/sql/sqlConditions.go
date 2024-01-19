@@ -3,8 +3,9 @@ package sql
 import (
 	"net"
 
+	"slices"
+
 	"github.com/padok-team/yatas/plugins/commons"
-	"golang.org/x/exp/slices"
 )
 
 func SQLInstanceIsRegional(resource commons.Resource) bool {
