@@ -14,6 +14,7 @@ import (
 	"github.com/padok-team/yatas-gcp/gcp/iam"
 	"github.com/padok-team/yatas-gcp/gcp/instance"
 	"github.com/padok-team/yatas-gcp/gcp/loadbalancing"
+	"github.com/padok-team/yatas-gcp/gcp/network"
 	"github.com/padok-team/yatas-gcp/gcp/sql"
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas-gcp/logger"
@@ -101,6 +102,7 @@ func initTest(account internal.GCPAccount, c *commons.Config) commons.Tests {
 	go commons.CheckMacroTest(&wg, c, cloudrun.RunChecks)(&wg, account, c, queue)
 	go commons.CheckMacroTest(&wg, c, functions.RunChecks)(&wg, account, c, queue)
 	go commons.CheckMacroTest(&wg, c, iam.RunChecks)(&wg, account, c, queue)
+	go commons.CheckMacroTest(&wg, c, network.RunChecks)(&wg, account, c, queue)
 
 	go func() {
 		for t := range queue {

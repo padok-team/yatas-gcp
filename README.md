@@ -37,7 +37,7 @@ pluginsConfiguration:
 
 <!-- BEGIN_YATAS -->
 
-## GCP - 25 Checks
+## GCP - 27 Checks
 
 ### FUN
 - GCP_FUN_001 CloudFunctions are not directly exposed on the internet
@@ -61,6 +61,10 @@ pluginsConfiguration:
 
 ### LB
 - GCP_LB_001 Check if SSL certificates attached to HTTPS forwarding rules are in auto-renewed (managed mode)
+
+### NET
+- GCP_NET_001 SSH ingress firewall rules only allow IAP
+- GCP_NET_002 SSH ingress firewall rules apply on specific tags or service accounts
 
 ### RUN
 - GCP_RUN_001 CloudRun services are not directly exposed on the internet
