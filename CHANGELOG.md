@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/padok-team/yatas-gcp/compare/v1.7.0...v1.8.0) (2024-01-26)
+
+
+### Features
+
+* **checks:** add checks on firewall rules ([#60](https://github.com/padok-team/yatas-gcp/issues/60)) ([2d1b4eb](https://github.com/padok-team/yatas-gcp/commit/2d1b4ebdb9dff9ca4ea5f116f457622202f343c0))
+
 ## [1.7.0](https://github.com/padok-team/yatas-gcp/compare/v1.6.0...v1.7.0) (2024-01-19)
 
 
