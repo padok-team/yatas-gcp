@@ -5,7 +5,7 @@ go 1.21
 require (
 	cloud.google.com/go/compute v1.23.4
 	cloud.google.com/go/container v1.30.1
-	cloud.google.com/go/functions v1.15.4
+	cloud.google.com/go/functions v1.16.0
 	cloud.google.com/go/iam v1.1.6
 	cloud.google.com/go/resourcemanager v1.9.5
 	cloud.google.com/go/run v1.3.4
@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/go-hclog v1.6.2
 	github.com/hashicorp/go-plugin v1.6.0
 	github.com/padok-team/yatas v1.5.1
-	google.golang.org/api v0.160.0
+	google.golang.org/api v0.161.0
 )
 
 require (
