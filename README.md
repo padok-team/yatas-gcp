@@ -85,3 +85,7 @@ pluginsConfiguration:
 - GCP_VM_003 Check VM instance group is multi-zonal
 
 <!-- END_YATAS -->
+
+## Contribute
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
