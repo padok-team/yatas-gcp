@@ -10,7 +10,7 @@ require (
 	cloud.google.com/go/resourcemanager v1.9.6
 	cloud.google.com/go/run v1.3.6
 	cloud.google.com/go/storage v1.38.0
-	github.com/hashicorp/go-hclog v1.6.2
+	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-plugin v1.6.0
 	github.com/padok-team/yatas v1.5.1
 	google.golang.org/api v0.169.0
