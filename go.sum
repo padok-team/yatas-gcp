@@ -9,8 +9,8 @@ cloud.google.com/go/compute v1.25.1 h1:ZRpHJedLtTpKgr3RV1Fx23NuaAEN1Zfx9hw1u4aJd
 cloud.google.com/go/compute v1.25.1/go.mod h1:oopOIR53ly6viBYxaDhBfJwzUAxf1zE//uf3IB011ls=
 cloud.google.com/go/compute/metadata v0.3.0 h1:Tz+eQXMEqDIKRsmY3cHTL6FVaynIjX2QxYC4trgAKZc=
 cloud.google.com/go/compute/metadata v0.3.0/go.mod h1:zFmK7XCadkQkj6TtorcaGlCW1hT1fIilQDwofLpJ20k=
-cloud.google.com/go/container v1.35.0 h1:y5gmgrMMhTrLnQQdMCw0t/Yis9Ps7jvAG4JYcRWxR8g=
-cloud.google.com/go/container v1.35.0/go.mod h1:02fCocALhTHLw4zwqrRaFrztjoQd53yZWFq0nvr+hQo=
+cloud.google.com/go/container v1.35.1 h1:Vbu/3PZNrgV1Z5DGcRubQdUccX/uMUDNc+NgHNIfbEk=
+cloud.google.com/go/container v1.35.1/go.mod h1:udm8fgLm3TtpnjFN4QLLjZezAIIp/VnMo316yIRVRQU=
 cloud.google.com/go/functions v1.16.2 h1:83bd2lCgtu2nLbX2jrqsrQhIs7VuVA1N6Op5syeRVIg=
 cloud.google.com/go/functions v1.16.2/go.mod h1:+gMvV5E3nMb9EPqX6XwRb646jTyVz8q4yk3DD6xxHpg=
 cloud.google.com/go/iam v1.1.8 h1:r7umDwhj+BQyz0ScZMp4QrGXjSTI3ZINnpgU2nlB/K0=
