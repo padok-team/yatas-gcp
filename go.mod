@@ -11,7 +11,7 @@ require (
 	cloud.google.com/go/run v1.3.7
 	cloud.google.com/go/storage v1.39.1
 	github.com/hashicorp/go-hclog v1.6.3
-	github.com/hashicorp/go-plugin v1.6.0
+	github.com/hashicorp/go-plugin v1.6.1
 	github.com/padok-team/yatas v1.5.1
 	google.golang.org/api v0.177.0
 )
