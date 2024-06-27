@@ -3,8 +3,8 @@ module github.com/padok-team/yatas-gcp
 go 1.21
 
 require (
-	cloud.google.com/go/compute v1.27.0
-	cloud.google.com/go/container v1.37.0
+	cloud.google.com/go/compute v1.27.1
+	cloud.google.com/go/container v1.37.1
 	cloud.google.com/go/functions v1.16.3
 	cloud.google.com/go/iam v1.1.9
 	cloud.google.com/go/resourcemanager v1.9.8
