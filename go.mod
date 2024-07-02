@@ -9,7 +9,7 @@ require (
 	cloud.google.com/go/iam v1.1.10
 	cloud.google.com/go/resourcemanager v1.9.9
 	cloud.google.com/go/run v1.3.9
-	cloud.google.com/go/storage v1.41.0
+	cloud.google.com/go/storage v1.42.0
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-plugin v1.6.1
 	github.com/padok-team/yatas v1.5.1

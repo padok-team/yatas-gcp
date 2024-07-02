@@ -21,8 +21,8 @@ cloud.google.com/go/resourcemanager v1.9.9 h1:9JgRo4uBdCLJpWb6c+1+q7QPyWzH0LSCKU
 cloud.google.com/go/resourcemanager v1.9.9/go.mod h1:vCBRKurJv+XVvRZ0XFhI/eBrBM7uBOPFjMEwSDMIflY=
 cloud.google.com/go/run v1.3.9 h1:De6XlIBjzEFXPzDQ/hJgvieh4H/105mhkkwxL5DmH0o=
 cloud.google.com/go/run v1.3.9/go.mod h1:Ep/xsiUt5ZOwNptGl1FBlHb+asAgqB+9RDJKBa/c1mI=
-cloud.google.com/go/storage v1.41.0 h1:RusiwatSu6lHeEXe3kglxakAmAbfV+rhtPqA6i8RBx0=
-cloud.google.com/go/storage v1.41.0/go.mod h1:J1WCa/Z2FcgdEDuPUY8DxT5I+d9mFKsCepp5vR6Sq80=
+cloud.google.com/go/storage v1.42.0 h1:4QtGpplCVt1wz6g5o1ifXd656P5z+yNgzdw1tVfp0cU=
+cloud.google.com/go/storage v1.42.0/go.mod h1:HjMXRFq65pGKFn6hxj6x3HCyR41uSB72Z0SO/Vn6JFQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/bufbuild/protocompile v0.4.0 h1:LbFKd2XowZvQ/kajzguUp2DC9UEIQhIq77fZZlaQsNA=
 github.com/bufbuild/protocompile v0.4.0/go.mod h1:3v93+mbWn/v3xzN+31nwkJfrEpAUwp+BagBSZWx+TP8=
