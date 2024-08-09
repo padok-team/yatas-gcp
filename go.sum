@@ -9,8 +9,8 @@ cloud.google.com/go/compute v1.27.5 h1:iii9Z+FhEeZ5cUkGOEqU+GM7MJSyxMgbE7H7j+Jnd
 cloud.google.com/go/compute v1.27.5/go.mod h1:DfwDGujFTdSeiE8b8ZqadF/uxHFBz+ekGsk8Zfi9dTA=
 cloud.google.com/go/compute/metadata v0.5.0 h1:Zr0eK8JbFv6+Wi4ilXAR8FJ3wyNdpxHKJNPos6LTZOY=
 cloud.google.com/go/compute/metadata v0.5.0/go.mod h1:aHnloV2TPI38yx4s9+wAZhHykWvVCfu7hQbF+9CWoiY=
-cloud.google.com/go/container v1.38.0 h1:GP5zLamfvPZeOTifnGBSER/br76D5eJ97xhcXXrh5tM=
-cloud.google.com/go/container v1.38.0/go.mod h1:U0uPBvkVWOJGY/0qTVuPS7NeafFEUsHSPqT5pB8+fCY=
+cloud.google.com/go/container v1.38.1 h1:Pb0GbZIg/KS4A9gbF3J4JHmrgPpBA2y+4v9N04aJkOs=
+cloud.google.com/go/container v1.38.1/go.mod h1:2r4Qiz6IG2LhRFfWhPNmrYD7yzdE2B2kghigVWoSw/g=
 cloud.google.com/go/functions v1.16.6 h1:tPe3/48RpjcFk96VeB6jOKQpK8nliGJLsgjh6pUOyFQ=
 cloud.google.com/go/functions v1.16.6/go.mod h1:wOzZakhMueNQaBUJdf0yjsJIe0GBRu+ZTvdSTzqHLs0=
 cloud.google.com/go/iam v1.1.13 h1:7zWBXG9ERbMLrzQBRhFliAV+kjcRToDTgQT3CTwYyv4=
@@ -19,8 +19,8 @@ cloud.google.com/go/longrunning v0.5.11 h1:Havn1kGjz3whCfoD8dxMLP73Ph5w+ODyZB9RU
 cloud.google.com/go/longrunning v0.5.11/go.mod h1:rDn7//lmlfWV1Dx6IB4RatCPenTwwmqXuiP0/RgoEO4=
 cloud.google.com/go/resourcemanager v1.9.12 h1:p++iHmmeq9iWTia8WhNmPvBhL7MZsglQpZAYlHCguBs=
 cloud.google.com/go/resourcemanager v1.9.12/go.mod h1:unouv9x3+I+6kVeE10LGM3oJ8aQrUZganWnRchitbAM=
-cloud.google.com/go/run v1.4.0 h1:ai1rnbX92iPqWg9MrbDbebsxlUSAiOK6N9dEDDQeVA0=
-cloud.google.com/go/run v1.4.0/go.mod h1:4G9iHLjdOC+CQ0CzA0+6nLeR6NezVPmlj+GULmb0zE4=
+cloud.google.com/go/run v1.4.1 h1:grsUhL/Dlp7z5z2A4Nxi1oxEyktBkyB8VuobO6fuILs=
+cloud.google.com/go/run v1.4.1/go.mod h1:gaXIpytRDfrJjb3pz9PRG2q2KUaDDDV+Uvmq6QRZH20=
 cloud.google.com/go/storage v1.41.0 h1:RusiwatSu6lHeEXe3kglxakAmAbfV+rhtPqA6i8RBx0=
 cloud.google.com/go/storage v1.41.0/go.mod h1:J1WCa/Z2FcgdEDuPUY8DxT5I+d9mFKsCepp5vR6Sq80=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
