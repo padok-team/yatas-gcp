@@ -12,7 +12,7 @@ require (
 	cloud.google.com/go/storage v1.41.0
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-plugin v1.6.3
-	github.com/padok-team/yatas v1.5.1
+	github.com/padok-team/yatas v1.6.1
 	google.golang.org/api v0.191.0
 )
 
