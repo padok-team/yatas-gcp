@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"encoding/gob"
 	"os"
 	"sync"
 
+	resourcemanager "cloud.google.com/go/resourcemanager/apiv3"
+	resourcemanagerpb "cloud.google.com/go/resourcemanager/apiv3/resourcemanagerpb"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/padok-team/yatas-gcp/gcp/cloudrun"
@@ -19,6 +22,7 @@ import (
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas-gcp/logger"
 	"github.com/padok-team/yatas/plugins/commons"
+	"google.golang.org/api/iterator"
 )
 
 type YatasPlugin struct {
@@ -175,6 +179,10 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 						switch keyaccounts {
 						case "project":
 							account.Project = valueaccounts.(string)
+						case "organization":
+							account.Organization = valueaccounts.(string)
+						case "folder":
+							account.Folder = valueaccounts.(string)
 						case "computeRegions":
 							// Cannot directly unmarshal []interface{} to []string
 							computeRegions := valueaccounts.([]interface{})
@@ -183,7 +191,11 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 							}
 						}
 					}
-					tmpAccounts = append(tmpAccounts, account)
+					resolvedAccounts, err := resolveAccountProjects(account)
+					if err != nil {
+						return nil, err
+					}
+					tmpAccounts = append(tmpAccounts, resolvedAccounts...)
 
 				}
 
@@ -198,5 +210,93 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 	logger.Logger.Debug("Unmarshal Done ✅")
 	logger.Logger.Debug("All accounts", "accounts", accounts)
 	logger.Logger.Debug("Length of accounts", "len", len(accounts))
+	return accounts, nil
+}
+
+func resolveAccountProjects(account internal.GCPAccount) ([]internal.GCPAccount, error) {
+	if account.Project != "" {
+		return []internal.GCPAccount{account}, nil
+	}
+
+	parent := ""
+	if account.Organization != "" {
+		parent = "organizations/" + account.Organization
+	} else if account.Folder != "" {
+		parent = "folders/" + account.Folder
+	}
+	if parent == "" {
+		return []internal.GCPAccount{account}, nil
+	}
+
+	projects, err := listProjects(parent, account.ComputeRegions)
+	if err != nil {
+		return nil, err
+	}
+	if account.Folder != "" {
+		folderProjects, err := listFolderProjects(parent, account.ComputeRegions)
+		if err != nil {
+			return nil, err
+		}
+		projects = append(projects, folderProjects...)
+	}
+
+	return projects, nil
+}
+
+func listFolderProjects(parent string, computeRegions []string) ([]internal.GCPAccount, error) {
+	ctx := context.Background()
+	foldersClient, err := resourcemanager.NewFoldersClient(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer foldersClient.Close()
+
+	var accounts []internal.GCPAccount
+	iter := foldersClient.ListFolders(ctx, &resourcemanagerpb.ListFoldersRequest{Parent: parent})
+	for {
+		folder, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		folderProjects, err := listProjects(folder.Name, computeRegions)
+		if err != nil {
+			return nil, err
+		}
+		accounts = append(accounts, folderProjects...)
+
+		children, err := listFolderProjects(folder.Name, computeRegions)
+		if err != nil {
+			return nil, err
+		}
+		accounts = append(accounts, children...)
+	}
+
+	return accounts, nil
+}
+
+func listProjects(parent string, computeRegions []string) ([]internal.GCPAccount, error) {
+	ctx := context.Background()
+	projectsClient, err := resourcemanager.NewProjectsClient(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer projectsClient.Close()
+
+	var accounts []internal.GCPAccount
+	iter := projectsClient.ListProjects(ctx, &resourcemanagerpb.ListProjectsRequest{Parent: parent})
+	for {
+		project, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		accounts = append(accounts, internal.GCPAccount{Project: project.ProjectId, ComputeRegions: computeRegions})
+	}
+
 	return accounts, nil
 }
