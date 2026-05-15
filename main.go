@@ -1,10 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/gob"
+	"fmt"
 	"os"
 	"sync"
 
+	"cloud.google.com/go/resourcemanager/apiv3"
+	resourcemanagerpb "cloud.google.com/go/resourcemanager/apiv3/resourcemanagerpb"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/padok-team/yatas-gcp/gcp/cloudrun"
@@ -19,6 +23,7 @@ import (
 	"github.com/padok-team/yatas-gcp/internal"
 	"github.com/padok-team/yatas-gcp/logger"
 	"github.com/padok-team/yatas/plugins/commons"
+	"google.golang.org/api/iterator"
 )
 
 type YatasPlugin struct {
@@ -118,6 +123,105 @@ func initTest(account internal.GCPAccount, c *commons.Config) commons.Tests {
 	return checks
 }
 
+func parseGCPAccount(values map[string]interface{}) internal.GCPAccount {
+	var account internal.GCPAccount
+	for keyaccounts, valueaccounts := range values {
+		switch keyaccounts {
+		case "project":
+			account.Project = valueaccounts.(string)
+		case "organization":
+			account.Organization = valueaccounts.(string)
+		case "folder":
+			account.Folder = valueaccounts.(string)
+		case "computeRegions":
+			// Cannot directly unmarshal []interface{} to []string
+			computeRegions := valueaccounts.([]interface{})
+			for _, computeRegion := range computeRegions {
+				account.ComputeRegions = append(account.ComputeRegions, computeRegion.(string))
+			}
+		}
+	}
+	return account
+}
+
+func expandGCPAccount(account internal.GCPAccount) ([]internal.GCPAccount, error) {
+	if account.Project != "" {
+		return []internal.GCPAccount{account}, nil
+	}
+
+	ctx := context.Background()
+	var parents []string
+	if account.Organization != "" {
+		parents = append(parents, fmt.Sprintf("organizations/%s", account.Organization))
+	}
+	if account.Folder != "" {
+		parents = append(parents, fmt.Sprintf("folders/%s", account.Folder))
+	}
+
+	var accounts []internal.GCPAccount
+	for _, parent := range parents {
+		projects, err := listProjects(ctx, parent, account.ComputeRegions)
+		if err != nil {
+			return nil, err
+		}
+		accounts = append(accounts, projects...)
+		if err := listFolderProjects(ctx, parent, account.ComputeRegions, &accounts); err != nil {
+			return nil, err
+		}
+	}
+	return accounts, nil
+}
+
+func listProjects(ctx context.Context, parent string, computeRegions []string) ([]internal.GCPAccount, error) {
+	client, err := resourcemanager.NewProjectsClient(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer client.Close()
+
+	it := client.ListProjects(ctx, &resourcemanagerpb.ListProjectsRequest{Parent: parent})
+	var accounts []internal.GCPAccount
+	for {
+		project, err := it.Next()
+		if err != nil {
+			if err == iterator.Done {
+				break
+			}
+			return nil, err
+		}
+		accounts = append(accounts, internal.GCPAccount{Project: project.ProjectId, ComputeRegions: computeRegions})
+	}
+	return accounts, nil
+}
+
+func listFolderProjects(ctx context.Context, parent string, computeRegions []string, accounts *[]internal.GCPAccount) error {
+	client, err := resourcemanager.NewFoldersClient(ctx)
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+
+	it := client.ListFolders(ctx, &resourcemanagerpb.ListFoldersRequest{Parent: parent})
+	for {
+		folder, err := it.Next()
+		if err != nil {
+			if err == iterator.Done {
+				break
+			}
+			return err
+		}
+		projects, err := listProjects(ctx, folder.Name, computeRegions)
+		if err != nil {
+			return err
+		}
+		*accounts = append(*accounts, projects...)
+		if err := listFolderProjects(ctx, folder.Name, computeRegions, accounts); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // handshakeConfigs are used to just do a basic handshake between
 // a plugin and host. If the handshake fails, a user friendly error is shown.
 // This prevents users from executing bad plugins or executing a plugin
@@ -169,21 +273,13 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 			case "accounts":
 
 				for _, v := range value.([]interface{}) {
-					var account internal.GCPAccount
+					account := parseGCPAccount(v.(map[string]interface{}))
 					logger.Logger.Debug("Inspecting account", "account", v)
-					for keyaccounts, valueaccounts := range v.(map[string]interface{}) {
-						switch keyaccounts {
-						case "project":
-							account.Project = valueaccounts.(string)
-						case "computeRegions":
-							// Cannot directly unmarshal []interface{} to []string
-							computeRegions := valueaccounts.([]interface{})
-							for _, computeRegion := range computeRegions {
-								account.ComputeRegions = append(account.ComputeRegions, computeRegion.(string))
-							}
-						}
+					resolvedAccounts, err := expandGCPAccount(account)
+					if err != nil {
+						return nil, err
 					}
-					tmpAccounts = append(tmpAccounts, account)
+					tmpAccounts = append(tmpAccounts, resolvedAccounts...)
 
 				}
 
