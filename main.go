@@ -175,6 +175,10 @@ func UnmarshalGCP(g *YatasPlugin, c *commons.Config) ([]internal.GCPAccount, err
 						switch keyaccounts {
 						case "project":
 							account.Project = valueaccounts.(string)
+						case "organization", "organizationId":
+							account.Organization = valueaccounts.(string)
+						case "folder", "folderId":
+							account.Folder = valueaccounts.(string)
 						case "computeRegions":
 							// Cannot directly unmarshal []interface{} to []string
 							computeRegions := valueaccounts.([]interface{})
