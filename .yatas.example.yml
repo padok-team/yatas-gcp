@@ -16,3 +16,9 @@ pluginsConfiguration:
       - project: "project-2"
         computeRegions:
           - us-east1
+      - organization: "123456789012"
+        computeRegions:
+          - europe-west1
+      - folder: "987654321098"
+        computeRegions:
+          - us-central1
