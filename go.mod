@@ -1,6 +1,6 @@
 module github.com/padok-team/yatas-gcp
 
-go 1.21
+go 1.23.0
 
 require (
 	cloud.google.com/go/compute v1.27.5
@@ -47,7 +47,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
-	golang.org/x/oauth2 v0.22.0 // indirect
+	golang.org/x/oauth2 v0.27.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
